@@ -11,7 +11,7 @@ import java.util.List;
  * @since 2015-5-27
  */
 public class SimpleTreeImpl<T> implements SimpleTree<T> {
-	private T parent;
+	private SimpleTree<T> parent;
 	private T data;
 	private List<SimpleTree<T>> children;
 
@@ -21,32 +21,32 @@ public class SimpleTreeImpl<T> implements SimpleTree<T> {
 	}
 
 
-	public SimpleTreeImpl(T parent, T data) {
+	public SimpleTreeImpl(SimpleTree<T> parent, T data) {
 		this.parent = parent;
 		this.data = data;
 	}
 
 
 	@SafeVarargs
-	public SimpleTreeImpl(T parent, T data, T... children) {
+	public SimpleTreeImpl(SimpleTree<T> parent, T data, T... children) {
 		this(parent, data);
 		lazyInitChildren(Arrays.asList(children));
 	}
 
 
-	public SimpleTreeImpl(T parent, T data, Collection<T> children) {
+	public SimpleTreeImpl(SimpleTree<T> parent, T data, Collection<T> children) {
 		this(parent, data);
 		lazyInitChildren(children);
 	}
 
 
 	@Override
-	public T getParent() {
+	public SimpleTree<T> getParent() {
 		return parent;
 	}
 
 
-	public void setParent(T parent) {
+	public void setParent(SimpleTree<T> parent) {
 		this.parent = parent;
 	}
 
@@ -102,7 +102,7 @@ public class SimpleTreeImpl<T> implements SimpleTree<T> {
 
 
 	private final SimpleTreeImpl<T> newChild(T child) {
-		return new SimpleTreeImpl<>(parent, child);
+		return new SimpleTreeImpl<>(this, child);
 	}
 
 

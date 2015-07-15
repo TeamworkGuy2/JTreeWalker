@@ -10,7 +10,7 @@ public interface SimpleTree<T> extends TreeLike<T, SimpleTree<T>> {
 
 
 	@Override
-	public T getParent();
+	public SimpleTree<T> getParent();
 
 
 	@Override

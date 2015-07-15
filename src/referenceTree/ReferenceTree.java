@@ -100,7 +100,7 @@ public class ReferenceTree<T, R> {
 	 * The first reference list contains the tree's root reference, the second reference list contains the root's children,
 	 * the third reference list contains the children of the root's children, etc.
 	 * @param tree
-	 * @return
+	 * @return A list of {@link ReferenceTreeEntry} lists where each list corresponds to a level of the original tree
 	 */
 	public static <T, R> List<List<ReferenceTreeEntry<T, R>>> treeToLevels(ReferenceTree<T, R> tree) {
 		List<List<ReferenceTreeEntry<T, R>>> levels = new ArrayList<>();

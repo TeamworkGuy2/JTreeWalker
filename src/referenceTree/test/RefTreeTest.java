@@ -36,7 +36,9 @@ public class RefTreeTest {
 		ReferenceTreeEntry<String, String> lastRef = prevStackParent;
 		int stackDepth = 0;
 
+		@SuppressWarnings("unused")
 		int i = 0;
+
 		for(Map.Entry<String, Integer> entry : flatMap) {
 			// if the entry is one level deeper than it's parent, add it as a child of the parent
 			if(entry.getValue() > stackDepth) {
@@ -66,6 +68,7 @@ public class RefTreeTest {
 	@Test
 	public void createNestedTreeTest() {
 		Map<String, List<String>> treeInfo = RefTreeMockData.createTestTreeInfo();
+		@SuppressWarnings("unused")
 		Map.Entry<Map<Reference<String, String>, List<ReferenceTreeEntry<String, String>>>, Map<Reference<String, String>, String>> masterTree = ReferenceProcessor.createFirstLevelRefTree(treeInfo.keySet(), (k) -> treeInfo.get(k), (ref) -> ref, (ref) -> ref);
 
 		Map<String, ReferenceTree<String, String>> trees = new HashMap<>();

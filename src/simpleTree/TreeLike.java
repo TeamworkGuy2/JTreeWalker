@@ -9,7 +9,7 @@ import java.util.Collection;
 public interface TreeLike<T, R extends TreeLike<T, R>> {
 
 
-	public T getParent();
+	public R getParent();
 
 
 	public T getData();
