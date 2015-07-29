@@ -45,9 +45,16 @@ public class TreeUtil {
 
 
 	// retrieve all levels of children from a tree
-	public static <R extends SimpleTree<T>, T> void retrieveNodesByDepth(R tree, boolean consumeOnlyLeafNodes, Predicate<R> hasChildren,
+	public static <R> void retrieveNodesByDepth(R tree, boolean consumeOnlyLeafNodes, Predicate<R> hasChildren,
 			Function<R, List<R>> childrenGetter, List<List<R>> dst) {
-		retrieveNodesByDepth(0, 1, 0, null, tree, hasChildren, childrenGetter, consumeOnlyLeafNodes, dst);
+		traverseNodesByDepth(0, 1, 0, null, tree, hasChildren, childrenGetter, consumeOnlyLeafNodes, dst);
+	}
+
+
+	public static <R> void traverseNodesByDepthInPlace(R tree, boolean consumeOnlyLeafNodes, Predicate<R> hasChildren,
+			Function<R, List<R>> childrenGetter, TreePathConsumer<R> consumer) {
+		List<R> parentStack = new ArrayList<>();
+		traverseNodesByDepthInPlace(0, 1, 0, null, tree, hasChildren, childrenGetter, consumeOnlyLeafNodes, parentStack, consumer);
 	}
 
 
@@ -56,6 +63,8 @@ public class TreeUtil {
 			IndexedSubtreeConsumer<R> consumer, boolean consumeOnlyLeafNodes) {
 		if(!hasChildren.test(tree)) {
 			consumer.accept(tree, index, size, depth, parent);
+			// return early because no children
+			return;
 		}
 
 		List<R> children = childrenGetter.apply(tree);
@@ -89,6 +98,8 @@ public class TreeUtil {
 			SubtreeConsumer<R> consumer, boolean consumeOnlyLeafNodes) {
 		if(!hasChildren.test(tree)) {
 			consumer.accept(tree, depth, parent);
+			// return early because no children
+			return;
 		}
 
 		Collection<R> children = childrenGetter.apply(tree);
@@ -141,6 +152,8 @@ public class TreeUtil {
 			if(parent != null) {
 				remover.accept(parent, tree);
 			}
+			// return early because no children
+			return;
 		}
 
 		List<R> children = childrenGetter.apply(tree);
@@ -170,7 +183,7 @@ public class TreeUtil {
 	}
 
 
-	public static <R extends SimpleTree<T>, T> void retrieveNodesByDepth(int index, int size, int depth, R parent, R tree, Predicate<R> hasChildren, Function<R, List<R>> childrenGetter,
+	public static <R> void traverseNodesByDepth(int index, int size, int depth, R parent, R tree, Predicate<R> hasChildren, Function<R, List<R>> childrenGetter,
 			boolean consumeOnlyLeafNodes, List<List<R>> dst) {
 		if(!hasChildren.test(tree)) {
 			while(dst.size() <= (!consumeOnlyLeafNodes ? depth : 0)) {
@@ -182,6 +195,8 @@ public class TreeUtil {
 			else {
 				dst.get(0).add(tree);
 			}
+			// return early because no children
+			return;
 		}
 
 		List<R> children = childrenGetter.apply(tree);
@@ -195,7 +210,7 @@ public class TreeUtil {
 
 			R subtree = children.get(count);
 			if(subtree != null) {
-				retrieveNodesByDepth(count, sizeI, depth, tree, subtree, hasChildren, childrenGetter, consumeOnlyLeafNodes, dst);
+				traverseNodesByDepth(count, sizeI, depth, tree, subtree, hasChildren, childrenGetter, consumeOnlyLeafNodes, dst);
 			}
 
 			count++;
@@ -213,4 +228,106 @@ public class TreeUtil {
 		}
 	}
 
+
+
+	public static <R> void traverseNodesByDepthInPlace(int index, int size, int depth, R parent, R tree, Predicate<R> hasChildren, Function<R, List<R>> childrenGetter,
+			boolean consumeOnlyLeafNodes, List<R> parentStack, TreePathConsumer<R> consumer) {
+		if(!hasChildren.test(tree)) {
+			consumer.accept(tree, depth, parentStack);
+			// return early because no children
+			return;
+		}
+
+		List<R> children = childrenGetter.apply(tree);
+		int count = 0;
+
+		parentStack.add(tree);
+
+		int sizeI = children.size();
+		while(count < sizeI) {
+			if(count == 0) {
+				depth++;
+			}
+
+			R subtree = children.get(count);
+			if(subtree != null) {
+				traverseNodesByDepthInPlace(count, sizeI, depth, tree, subtree, hasChildren, childrenGetter, consumeOnlyLeafNodes, parentStack, consumer);
+			}
+
+			count++;
+		}
+
+		parentStack.remove(parentStack.size() - 1);
+
+		if(count > 0) {
+			if(!consumeOnlyLeafNodes) {
+				consumer.accept(tree, depth, parentStack);
+			}
+
+			depth--;
+		}
+	}
+
+
+	/*
+	public static <R> void retrieveNodesByDepthInPlace(R treeRoot, Predicate<R> hasChildren, Function<R, List<R>> childrenGetter,
+			boolean consumeOnlyLeafNodes, List<List<R>> dst) {
+		List<List<R>> branchesStack = new ArrayList<>();
+		List<Integer> branchIndexStack = new ArrayList<>();
+
+		ArrayList<R> tmpList = new ArrayList<>();
+		tmpList.add(treeRoot);
+		branchesStack.add(tmpList);
+		branchIndexStack.add(0);
+
+		int depth = 0;
+
+		while(true) {
+			List<R> curTree = branchesStack.get(branchesStack.size() - 1);
+			int curIndex = branchIndexStack.get(branchIndexStack.size() - 1);
+
+			if(!hasChildren.test(tree)) {
+				while(dst.size() <= (!consumeOnlyLeafNodes ? depth : 0)) {
+					dst.add(new ArrayList<>());
+				}
+				if(!consumeOnlyLeafNodes) {
+					dst.get(depth).add(tree);
+				}
+				else {
+					dst.get(0).add(tree);
+				}
+			}
+
+			List<R> children = childrenGetter.apply(tree);
+			int count = 0;
+
+			int sizeI = children.size();
+			while(count < sizeI) {
+				if(count == 0) {
+					depth++;
+				}
+
+				R subtree = children.get(count);
+				if(subtree != null) {
+					branchesStack.add(children);
+					branchIndexStack.add(count);
+					continue;
+				}
+
+				count++;
+			}
+
+			if(count > 0) {
+				if(!consumeOnlyLeafNodes) {
+					while(dst.size() < depth) {
+						dst.add(new ArrayList<>());
+					}
+					dst.get(depth - 1).add(tree);
+				}
+
+				depth--;
+			}
+		}
+	}
+	*/
 }

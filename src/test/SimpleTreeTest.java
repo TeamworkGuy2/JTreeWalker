@@ -2,21 +2,35 @@ package test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Test;
 
-import checks.CheckCollections;
 import simpleTree.SimpleTree;
 import simpleTree.SimpleTreeImpl;
 import simpleTree.SimpleTreeUtil;
+import simpleTree.TreeUtil;
+import checks.CheckCollections;
+import collectionUtils.Entries;
+import collectionUtils.ListUtil;
+import collectionUtils.MapBuilder;
 
 /**
  * @author TeamworkGuy2
  * @since 2015-7-1
  */
 public class SimpleTreeTest {
+	/*
+	Panel layout:
+	             A            Rocks               B
+	     Chair      Stool    Granite           Starship
+	indoor outdoor                          Battlecruiser
+	                                    Enterprise   Hyperion
+	                                     1701-D
+	*/
 	private static List<List<String>> tagsByLevel = Arrays.asList(
 			Arrays.asList("root"),
 			Arrays.asList("A", "Rocks", "B"),
@@ -24,6 +38,15 @@ public class SimpleTreeTest {
 			Arrays.asList("indoor", "outdoor", "Battlecruiser"),
 			Arrays.asList("Enterprise", "Hyperion"),
 			Arrays.asList("1701-D")
+		);
+
+	private static Map<String, List<String>> parentsByLeaf = MapBuilder.of(
+			Entries.of("1701-D", Arrays.asList("Enterprise", "Battlecruiser", "Starship", "B", "root")),
+			Entries.of("Hyperion", Arrays.asList("Battlecruiser", "Starship", "B", "root")),
+			Entries.of("indoor", Arrays.asList("Chair", "A", "root")),
+			Entries.of("outdoor", Arrays.asList("Chair", "A", "root")),
+			Entries.of("Stool", Arrays.asList("A", "root")),
+			Entries.of("Granite", Arrays.asList("Rocks", "root"))
 		);
 
 
@@ -59,6 +82,21 @@ public class SimpleTreeTest {
 		// hasChildren()
 		Assert.assertTrue(child1.hasChildren());
 		Assert.assertFalse(child1_1.hasChildren());
+	}
+
+
+	@Test
+	public void testTraverseNodesParents() {
+		SimpleTree<String> tree = createTree();
+
+		Map<String, List<String>> tmpParentsByLeaf = new HashMap<>(parentsByLeaf);
+
+		TreeUtil.traverseNodesByDepthInPlace(tree, true, (t) -> t.hasChildren(), (t) -> t.getChildren(), (branch, depth, parents) -> {
+			List<String> expectedParents = tmpParentsByLeaf.remove(branch.getData());
+			List<String> parentsData = ListUtil.map(parents, (p) -> p.getData());
+
+			CheckCollections.assertLooseEquals("'" + branch.getData() + "', at depth=" + depth, expectedParents, parentsData);
+		});
 	}
 
 
@@ -123,7 +161,7 @@ public class SimpleTreeTest {
 	static void addTreeTags(SimpleTree<String> rootTree) {
 		/*
 		Panel layout:
-		       A                  Rocks               B
+		             A            Rocks               B
 		     Chair      Stool    Granite           Starship
 		indoor outdoor                          Battlecruiser
 		                                    Enterprise   Hyperion

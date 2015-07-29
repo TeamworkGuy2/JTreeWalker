@@ -73,4 +73,13 @@ public class SimpleTreeUtil {
 		TreeUtil.removeAllNodes(0, null, tree, (t) -> t.hasChildren(), (t) -> t.getChildren(), consumer, (p, c) -> p.removeChild(c), consumeOnlyLeafNodes);
 	}
 
+
+	/*
+	public static <R> SimpleTreeImpl<R> copyToSimpleTree(R tree, Predicate<R> hasChildren, Function<R, Collection<R>> childrenGetter) {
+		SimpleTreeImpl<R> dst = new SimpleTreeImpl<R>(tree);
+
+		TreeUtil.traverse
+	}
+	*/
+
 }
