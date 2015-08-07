@@ -13,10 +13,10 @@ import simpleTree.SimpleTree;
 import simpleTree.SimpleTreeImpl;
 import simpleTree.SimpleTreeUtil;
 import simpleTree.TreeUtil;
+import twg2.collections.tuple.Tuples;
+import twg2.collections.util.ListUtil;
+import twg2.collections.util.MapBuilder;
 import checks.CheckCollections;
-import collectionUtils.Entries;
-import collectionUtils.ListUtil;
-import collectionUtils.MapBuilder;
 
 /**
  * @author TeamworkGuy2
@@ -41,12 +41,12 @@ public class SimpleTreeTest {
 		);
 
 	private static Map<String, List<String>> parentsByLeaf = MapBuilder.of(
-			Entries.of("1701-D", Arrays.asList("Enterprise", "Battlecruiser", "Starship", "B", "root")),
-			Entries.of("Hyperion", Arrays.asList("Battlecruiser", "Starship", "B", "root")),
-			Entries.of("indoor", Arrays.asList("Chair", "A", "root")),
-			Entries.of("outdoor", Arrays.asList("Chair", "A", "root")),
-			Entries.of("Stool", Arrays.asList("A", "root")),
-			Entries.of("Granite", Arrays.asList("Rocks", "root"))
+			Tuples.of("1701-D", Arrays.asList("Enterprise", "Battlecruiser", "Starship", "B", "root")),
+			Tuples.of("Hyperion", Arrays.asList("Battlecruiser", "Starship", "B", "root")),
+			Tuples.of("indoor", Arrays.asList("Chair", "A", "root")),
+			Tuples.of("outdoor", Arrays.asList("Chair", "A", "root")),
+			Tuples.of("Stool", Arrays.asList("A", "root")),
+			Tuples.of("Granite", Arrays.asList("Rocks", "root"))
 		);
 
 

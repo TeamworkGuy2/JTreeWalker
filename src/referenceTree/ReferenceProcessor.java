@@ -10,8 +10,9 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import collectionUtils.Entries;
-import collectionUtils.MapUtil;
+import twg2.collections.tuple.Entries;
+import twg2.collections.tuple.Tuples;
+import twg2.collections.util.MapUtil;
 
 /**
  * @author TeamworkGuy2
@@ -48,7 +49,7 @@ public class ReferenceProcessor {
 			}
 		}
 
-		return Entries.of(ReferenceTree.getRawSingleLevelTree(refTree), refIdentifierMap);
+		return Tuples.of(ReferenceTree.getRawSingleLevelTree(refTree), refIdentifierMap);
 	}
 
 
@@ -161,7 +162,7 @@ public class ReferenceProcessor {
 
 		for(Map.Entry<Reference<T, R>, Map.Entry<ReferenceTreeEntry<T, R>, D>> entry : firstLevelTree.entrySet()) {
 			ReferenceTree<T, R> refTree = extractReferenceTreeFromFirstLevelRefTree(firstLevelTree, entry.getValue().getKey(), handleCircularRef);
-			refTrees.add(Entries.of(entry.getValue().getValue(), refTree));
+			refTrees.add(Tuples.of(entry.getValue().getValue(), refTree));
 		}
 
 		return refTrees;
