@@ -7,15 +7,13 @@ import java.util.RandomAccess;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-/**
+/** Utility methods for {@link TreeLike} traversal
  * @author TeamworkGuy2
  * @since 2015-7-11
  */
 public class TreeUtil {
 
-	private TreeUtil() {
-		throw new AssertionError("cannot instantiate static class TreeUtil");
-	}
+	private TreeUtil() { throw new AssertionError("cannot instantiate static class TreeUtil"); }
 
 
 	public static <R> void traverseLeafNodes(R tree, Predicate<R> hasChildren, Function<R, List<R>> childrenGetter, IndexedSubtreeConsumer<R> consumer) {
@@ -229,7 +227,6 @@ public class TreeUtil {
 	}
 
 
-
 	public static <R> void traverseNodesByDepthInPlace(int index, int size, int depth, R parent, R tree, Predicate<R> hasChildren, Function<R, List<R>> childrenGetter,
 			boolean consumeOnlyLeafNodes, List<R> parentStack, TreePathConsumer<R> consumer) {
 		if(!hasChildren.test(tree)) {
@@ -268,66 +265,4 @@ public class TreeUtil {
 		}
 	}
 
-
-	/*
-	public static <R> void retrieveNodesByDepthInPlace(R treeRoot, Predicate<R> hasChildren, Function<R, List<R>> childrenGetter,
-			boolean consumeOnlyLeafNodes, List<List<R>> dst) {
-		List<List<R>> branchesStack = new ArrayList<>();
-		List<Integer> branchIndexStack = new ArrayList<>();
-
-		ArrayList<R> tmpList = new ArrayList<>();
-		tmpList.add(treeRoot);
-		branchesStack.add(tmpList);
-		branchIndexStack.add(0);
-
-		int depth = 0;
-
-		while(true) {
-			List<R> curTree = branchesStack.get(branchesStack.size() - 1);
-			int curIndex = branchIndexStack.get(branchIndexStack.size() - 1);
-
-			if(!hasChildren.test(tree)) {
-				while(dst.size() <= (!consumeOnlyLeafNodes ? depth : 0)) {
-					dst.add(new ArrayList<>());
-				}
-				if(!consumeOnlyLeafNodes) {
-					dst.get(depth).add(tree);
-				}
-				else {
-					dst.get(0).add(tree);
-				}
-			}
-
-			List<R> children = childrenGetter.apply(tree);
-			int count = 0;
-
-			int sizeI = children.size();
-			while(count < sizeI) {
-				if(count == 0) {
-					depth++;
-				}
-
-				R subtree = children.get(count);
-				if(subtree != null) {
-					branchesStack.add(children);
-					branchIndexStack.add(count);
-					continue;
-				}
-
-				count++;
-			}
-
-			if(count > 0) {
-				if(!consumeOnlyLeafNodes) {
-					while(dst.size() < depth) {
-						dst.add(new ArrayList<>());
-					}
-					dst.get(depth - 1).add(tree);
-				}
-
-				depth--;
-			}
-		}
-	}
-	*/
 }
