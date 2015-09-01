@@ -1,4 +1,4 @@
-package test;
+package twg2.treeLike.test;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -8,10 +8,10 @@ import java.util.Set;
 
 import org.junit.Test;
 
-import simpleTree.SimpleTree;
-import simpleTree.TreeBuilder;
 import twg2.collections.tuple.Entries;
 import twg2.collections.util.MapBuilder;
+import twg2.treeLike.TreeBuilder;
+import twg2.treeLike.simpleTree.SimpleTree;
 
 /**
  * @author TeamworkGuy2
@@ -68,6 +68,8 @@ public class TreeBuilderTest {
 		return childs;
 	}
 
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static Collection<Object> _children(Object obj) {
 		if(obj == null) {
 			return null;
@@ -109,8 +111,10 @@ public class TreeBuilderTest {
 
 
 	@SafeVarargs
-	public static final Map<String, Object> map(Map.Entry<String, ? extends Object>... entries) {
-		return (Map)MapBuilder.of((Entry[]) entries);
+	public static final <K, V> Map<K, V> map(Entry<? extends K, ? extends V>... entries) {
+		@SuppressWarnings("unchecked")
+		Entry<K, V>[] entriesTyped = (Entry<K, V>[])entries;
+		return MapBuilder.of(entriesTyped);
 	}
 
 }

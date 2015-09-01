@@ -1,4 +1,4 @@
-package referenceTree;
+package twg2.treeLike.referenceTree;
 
 import java.util.ArrayList;
 import java.util.Collection;

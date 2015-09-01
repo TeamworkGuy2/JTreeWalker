@@ -1,4 +1,4 @@
-package referenceTree.test;
+package twg2.treeLike.referenceTree.test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,11 +10,11 @@ import java.util.Map;
 import org.junit.Assert;
 import org.junit.Test;
 
-import referenceTree.Reference;
-import referenceTree.ReferenceImpl;
-import referenceTree.ReferenceProcessor;
-import referenceTree.ReferenceTree;
-import referenceTree.ReferenceTreeEntry;
+import twg2.treeLike.referenceTree.Reference;
+import twg2.treeLike.referenceTree.ReferenceImpl;
+import twg2.treeLike.referenceTree.ReferenceProcessor;
+import twg2.treeLike.referenceTree.ReferenceTree;
+import twg2.treeLike.referenceTree.ReferenceTreeEntry;
 
 /**
  * @author TeamworkGuy2

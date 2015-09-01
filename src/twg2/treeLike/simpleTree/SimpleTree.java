@@ -1,6 +1,8 @@
-package simpleTree;
+package twg2.treeLike.simpleTree;
 
 import java.util.List;
+
+import twg2.treeLike.TreeLike;
 
 /**
  * @author TeamworkGuy2

@@ -1,4 +1,4 @@
-package simpleTree;
+package twg2.treeLike;
 
 /**
  * @param <T> the tree branch element type

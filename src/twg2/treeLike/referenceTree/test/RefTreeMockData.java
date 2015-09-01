@@ -1,4 +1,4 @@
-package referenceTree.test;
+package twg2.treeLike.referenceTree.test;
 
 import java.util.Arrays;
 import java.util.HashMap;

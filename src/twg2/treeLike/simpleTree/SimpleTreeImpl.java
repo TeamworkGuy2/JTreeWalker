@@ -1,4 +1,4 @@
-package simpleTree;
+package twg2.treeLike.simpleTree;
 
 import java.util.ArrayList;
 import java.util.Arrays;

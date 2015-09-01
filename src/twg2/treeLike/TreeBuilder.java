@@ -1,10 +1,13 @@
-package simpleTree;
+package twg2.treeLike;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.RandomAccess;
 import java.util.function.Function;
 import java.util.function.Predicate;
+
+import twg2.treeLike.simpleTree.SimpleTree;
+import twg2.treeLike.simpleTree.SimpleTreeImpl;
 
 /**
  * @author TeamworkGuy2
