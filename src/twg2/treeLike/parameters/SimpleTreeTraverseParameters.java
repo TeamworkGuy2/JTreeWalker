@@ -23,6 +23,8 @@ public class SimpleTreeTraverseParameters<T> extends IndexedTreeTraverseParamete
 	@Override
 	public SimpleTreeTraverseParameters<T> setOnlyVisitLeaves(boolean onlyVisitLeaves) { super.setOnlyVisitLeaves(onlyVisitLeaves); return this; }
 	@Override
+	public SimpleTreeTraverseParameters<T> setSkipNullRoot(boolean skipNullRoot) { super.setSkipNullRoot(skipNullRoot); return this; }
+	@Override
 	public SimpleTreeTraverseParameters<T> setHasChildren(Predicate<SimpleTree<T>> hasChildren) { super.setHasChildren(hasChildren); return this; }
 	@Override
 	public SimpleTreeTraverseParameters<T> setChildrenGetter(Function<SimpleTree<T>, List<SimpleTree<T>>> childrenGetter) { super.setChildrenGetter(childrenGetter); return this; }
@@ -34,8 +36,14 @@ public class SimpleTreeTraverseParameters<T> extends IndexedTreeTraverseParamete
 
 	public SimpleTreeTraverseParameters(SimpleTree<T> tree, boolean onlyVisitLeaves,
 			IndexedSubtreeConsumer<T> consumer, IntConsumer startSubtreeFunc, IntConsumer endSubtreeFunc) {
-		super (tree, onlyVisitLeaves, (t) -> t.hasChildren(), (t) -> t.getChildren(), null, startSubtreeFunc, endSubtreeFunc);
-		this.setConsumerSimpleTree(consumer);
+		this(tree, onlyVisitLeaves, false, consumer, startSubtreeFunc, endSubtreeFunc);
+	}
+
+
+	public SimpleTreeTraverseParameters(SimpleTree<T> tree, boolean onlyVisitLeaves, boolean skipNullRoot,
+			IndexedSubtreeConsumer<T> consumer, IntConsumer startSubtreeFunc, IntConsumer endSubtreeFunc) {
+		super(tree, onlyVisitLeaves, skipNullRoot, (t) -> t.hasChildren(), (t) -> t.getChildren(), null, startSubtreeFunc, endSubtreeFunc);
+		this.setConsumerSimpleTree(consumer, skipNullRoot);
 	}
 
 
@@ -45,11 +53,25 @@ public class SimpleTreeTraverseParameters<T> extends IndexedTreeTraverseParamete
 
 
 	public SimpleTreeTraverseParameters<T> setConsumerSimpleTree(IndexedSubtreeConsumer<T> consumer) {
+		return setConsumerSimpleTree(consumer, this.isSkipNullRoot());
+	}
+
+
+	public SimpleTreeTraverseParameters<T> setConsumerSimpleTree(IndexedSubtreeConsumer<T> consumer, boolean skipNullRoot) {
 		this.simpleTreeConsumer = consumer;
 		super.setConsumerIndexed((SimpleTree<T> branch, int index, int size, int depth, SimpleTree<T> parentBranch) -> {
-			consumer.accept(branch.getData(), index, size, depth, parentBranch != null ? parentBranch.getData() : null);
+			T branchData = branch.getData();
+			if(branchData != null || !skipNullRoot) {
+				consumer.accept(branchData, index, size, depth, parentBranch != null ? parentBranch.getData() : null);
+			}
 		});
 		return this;
+	}
+
+
+	public static <_D> SimpleTreeTraverseParameters<_D> of(SimpleTree<_D> tree, boolean visitOnlyLeaves, boolean skipNonNull) {
+		val params = new SimpleTreeTraverseParameters<_D>(tree, visitOnlyLeaves, skipNonNull, null, null, null);
+		return params;
 	}
 
 
@@ -59,8 +81,20 @@ public class SimpleTreeTraverseParameters<T> extends IndexedTreeTraverseParamete
 	}
 
 
+	public static <_D> SimpleTreeTraverseParameters<_D> leafNodes(SimpleTree<_D> tree, boolean skipNullRoot) {
+		val params = new SimpleTreeTraverseParameters<_D>(tree, true, skipNullRoot, null, null, null);
+		return params;
+	}
+
+
 	public static <_D> SimpleTreeTraverseParameters<_D> leafNodes(SimpleTree<_D> tree) {
 		val params = new SimpleTreeTraverseParameters<_D>(tree, true, null, null, null);
+		return params;
+	}
+
+
+	public static <_D> SimpleTreeTraverseParameters<_D> allNodes(SimpleTree<_D> tree, boolean skipNullRoot) {
+		val params = new SimpleTreeTraverseParameters<_D>(tree, false, skipNullRoot, null, null, null);
 		return params;
 	}
 

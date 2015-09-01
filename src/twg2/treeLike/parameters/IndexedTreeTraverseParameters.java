@@ -22,6 +22,8 @@ public class IndexedTreeTraverseParameters<T> extends AbstractTreeTraverseParame
 	@Override
 	public IndexedTreeTraverseParameters<T> setOnlyVisitLeaves(boolean onlyVisitLeaves) { super.setOnlyVisitLeaves(onlyVisitLeaves); return this; }
 	@Override
+	public IndexedTreeTraverseParameters<T> setSkipNullRoot(boolean skipNullRoot) { super.setSkipNullRoot(skipNullRoot); return this; }
+	@Override
 	public IndexedTreeTraverseParameters<T> setHasChildren(Predicate<T> hasChildren) { super.setHasChildren(hasChildren); return this; }
 	@Override
 	public IndexedTreeTraverseParameters<T> setChildrenGetter(Function<T, List<T>> childrenGetter) { super.setChildrenGetter(childrenGetter); return this; }
@@ -31,10 +33,16 @@ public class IndexedTreeTraverseParameters<T> extends AbstractTreeTraverseParame
 	public IndexedTreeTraverseParameters<T> setEndSubtreeFunc(IntConsumer endSubtreeFunc) { super.setEndSubtreeFunc(endSubtreeFunc); return this; }
 
 
-	@SuppressWarnings("unchecked")
 	public IndexedTreeTraverseParameters(T tree, boolean onlyVisitLeaves, Predicate<T> hasChildren, Function<T, ? extends List<T>> childrenGetter,
 			IndexedSubtreeConsumer<T> consumer, IntConsumer startSubtreeFunc, IntConsumer endSubtreeFunc) {
-		super(tree, onlyVisitLeaves, hasChildren, (Function<T, List<T>>) childrenGetter, startSubtreeFunc, endSubtreeFunc);
+		this(tree, onlyVisitLeaves, false, hasChildren, childrenGetter, consumer, startSubtreeFunc, endSubtreeFunc);
+	}
+
+
+	@SuppressWarnings("unchecked")
+	public IndexedTreeTraverseParameters(T tree, boolean onlyVisitLeaves, boolean skipNullRoot, Predicate<T> hasChildren, Function<T, ? extends List<T>> childrenGetter,
+			IndexedSubtreeConsumer<T> consumer, IntConsumer startSubtreeFunc, IntConsumer endSubtreeFunc) {
+		super(tree, onlyVisitLeaves, skipNullRoot, hasChildren, (Function<T, List<T>>) childrenGetter, startSubtreeFunc, endSubtreeFunc);
 		this.consumer = consumer;
 	}
 

@@ -3,7 +3,6 @@ package twg2.treeLike;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.RandomAccess;
 import java.util.function.Function;
 import java.util.function.IntConsumer;
 import java.util.function.Predicate;
@@ -24,13 +23,13 @@ public class TreeTraverse {
 	public static class Indexed {
 
 		public static <R> void traverse(IndexedTreeTraverseParameters<R> params) {
-			traverseIndexedTree(0, 1, 0, null, params.getTree(), params.getHasChildren(), params.getChildrenGetter(), params.getConsumerIndexed(),
+			traverseIndexedTree(0, 1, 0, null, params.getTree(), params.isSkipNullRoot(), params.getHasChildren(), params.getChildrenGetter(), params.getConsumerIndexed(),
 					params.isOnlyVisitLeaves(), params.getStartSubtreeFunc(), params.getEndSubtreeFunc());
 		}
 
 
 		public static <R> void traverseNodesDepthFirst(IndexedTreeTraverseParameters<R> params) {
-			traverseIndexedTree(0, 1, 0, null, params.getTree(), params.getHasChildren(), params.getChildrenGetter(), params.getConsumerIndexed(), false, params.getStartSubtreeFunc(), params.getEndSubtreeFunc());
+			traverseIndexedTree(0, 1, 0, null, params.getTree(), params.isSkipNullRoot(), params.getHasChildren(), params.getChildrenGetter(), params.getConsumerIndexed(), false, params.getStartSubtreeFunc(), params.getEndSubtreeFunc());
 		}
 
 	}
@@ -38,7 +37,7 @@ public class TreeTraverse {
 
 	// simple tree traversal
 	public static <R> void traverse(TreeTraverseParameters<R> params) {
-		traverseTree(0, null, params.getTree(), params.getHasChildren(), params.getChildrenGetter(), params.getConsumer(),
+		traverseTree(0, null, params.getTree(), params.isSkipNullRoot(), params.getHasChildren(), params.getChildrenGetter(), params.getConsumer(),
 				params.isOnlyVisitLeaves(), params.getStartSubtreeFunc(), params.getEndSubtreeFunc());
 	}
 
@@ -57,10 +56,12 @@ public class TreeTraverse {
 
 
 	// traversal functions
-	public static <R> void traverseIndexedTree(int index, int size, int depth, R parent, R tree, Predicate<R> hasChildren, Function<R, ? extends List<R>> childrenGetter,
+	public static <R> void traverseIndexedTree(int index, int size, int depth, R parent, R tree, boolean skipNullRoot, Predicate<R> hasChildren, Function<R, ? extends List<R>> childrenGetter,
 			IndexedSubtreeConsumer<R> consumer, boolean consumeOnlyLeafNodes, IntConsumer startNodeFunc, IntConsumer endNodeFunc) {
 		if(!hasChildren.test(tree)) {
-			consumer.accept(tree, index, size, depth, parent);
+			if(tree != null || !skipNullRoot) {
+				consumer.accept(tree, index, size, depth, parent);
+			}
 			// return early because no children
 			return;
 		}
@@ -79,7 +80,7 @@ public class TreeTraverse {
 
 			R subtree = children.get(count);
 			if(subtree != null) {
-				traverseIndexedTree(count, sizeI, depth, tree, subtree, hasChildren, childrenGetter, consumer, consumeOnlyLeafNodes, startNodeFunc, endNodeFunc);
+				traverseIndexedTree(count, sizeI, depth, tree, subtree, false, hasChildren, childrenGetter, consumer, consumeOnlyLeafNodes, startNodeFunc, endNodeFunc);
 			}
 
 			count++;
@@ -90,17 +91,21 @@ public class TreeTraverse {
 				endNodeFunc.accept(depth);
 			}
 			if(!consumeOnlyLeafNodes) {
-				consumer.accept(tree, 0, sizeI, depth - 1, parent);
+				if(tree != null || !skipNullRoot) {
+					consumer.accept(tree, 0, sizeI, depth - 1, parent);
+				}
 			}
 			depth--;
 		}
 	}
 
 
-	public static <R> void traverseTree(int depth, R parent, R tree, Predicate<R> hasChildren, Function<R, ? extends Collection<R>> childrenGetter,
+	public static <R> void traverseTree(int depth, R parent, R tree, boolean skipNullRoot, Predicate<R> hasChildren, Function<R, ? extends Collection<R>> childrenGetter,
 			SubtreeConsumer<R> consumer, boolean consumeOnlyLeafNodes, IntConsumer startNodeFunc, IntConsumer endNodeFunc) {
 		if(!hasChildren.test(tree)) {
-			consumer.accept(tree, depth, parent);
+			if(tree != null || !skipNullRoot) {
+				consumer.accept(tree, depth, parent);
+			}
 			// return early because no children
 			return;
 		}
@@ -108,40 +113,19 @@ public class TreeTraverse {
 		Collection<R> children = childrenGetter.apply(tree);
 		int count = 0;
 
-		if(children instanceof RandomAccess && children instanceof List) {
-			List<R> childrenList = (List<R>)children;
-			int sizeI = childrenList.size();
-			while(count < sizeI) {
-				if(count == 0) {
-					depth++;
-					if(startNodeFunc != null) {
-						startNodeFunc.accept(depth);
-					}
+		for(R subtree : children) {
+			if(count == 0) {
+				depth++;
+				if(startNodeFunc != null) {
+					startNodeFunc.accept(depth);
 				}
-
-				R subtree = childrenList.get(count);
-				if(subtree != null) {
-					traverseTree(depth, tree, subtree, hasChildren, childrenGetter, consumer, consumeOnlyLeafNodes, startNodeFunc, endNodeFunc);
-				}
-
-				count++;
 			}
-		}
-		else {
-			for(R subtree : children) {
-				if(count == 0) {
-					depth++;
-					if(startNodeFunc != null) {
-						startNodeFunc.accept(depth);
-					}
-				}
 
-				if(subtree != null) {
-					traverseTree(depth, tree, subtree, hasChildren, childrenGetter, consumer, consumeOnlyLeafNodes, startNodeFunc, endNodeFunc);
-				}
-
-				count++;
+			if(subtree != null) {
+				traverseTree(depth, tree, subtree, false, hasChildren, childrenGetter, consumer, consumeOnlyLeafNodes, startNodeFunc, endNodeFunc);
 			}
+
+			count++;
 		}
 
 		if(count > 0) {
@@ -149,7 +133,9 @@ public class TreeTraverse {
 				endNodeFunc.accept(depth);
 			}
 			if(!consumeOnlyLeafNodes) {
-				consumer.accept(tree, depth - 1, parent);
+				if(tree != null || !skipNullRoot) {
+					consumer.accept(tree, depth - 1, parent);
+				}
 			}
 			depth--;
 		}

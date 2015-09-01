@@ -22,6 +22,8 @@ public class TreeTraverseParameters<T> extends AbstractTreeTraverseParameters<T,
 	@Override
 	public TreeTraverseParameters<T> setOnlyVisitLeaves(boolean onlyVisitLeaves) { super.setOnlyVisitLeaves(onlyVisitLeaves); return this; }
 	@Override
+	public TreeTraverseParameters<T> setSkipNullRoot(boolean skipNullRoot) { super.setSkipNullRoot(skipNullRoot); return this; }
+	@Override
 	public TreeTraverseParameters<T> setHasChildren(Predicate<T> hasChildren) { super.setHasChildren(hasChildren); return this; }
 	@Override
 	public TreeTraverseParameters<T> setChildrenGetter(Function<T, Collection<T>> childrenGetter) { super.setChildrenGetter(childrenGetter); return this; }
@@ -34,7 +36,7 @@ public class TreeTraverseParameters<T> extends AbstractTreeTraverseParameters<T,
 	@SuppressWarnings("unchecked")
 	public TreeTraverseParameters(T tree, boolean onlyVisitLeaves, Predicate<T> hasChildren, Function<T, ? extends Collection<T>> childrenGetter,
 			SubtreeConsumer<T> consumer, IntConsumer startSubtreeFunc, IntConsumer endSubtreeFunc) {
-		super(tree, onlyVisitLeaves, hasChildren, (Function<T, Collection<T>>) childrenGetter, startSubtreeFunc, endSubtreeFunc);
+		super(tree, onlyVisitLeaves, false, hasChildren, (Function<T, Collection<T>>) childrenGetter, startSubtreeFunc, endSubtreeFunc);
 		this.consumer = consumer;
 	}
 

@@ -15,16 +15,19 @@ import lombok.Getter;
 public abstract class AbstractTreeTraverseParameters<T, C extends Iterable<T>> {
 	public @Getter T tree;
 	public @Getter boolean onlyVisitLeaves;
+	/** whether to skip null root node - default false */
+	public @Getter boolean skipNullRoot;
 	public @Getter Predicate<T> hasChildren;
 	public @Getter Function<T, C> childrenGetter;
 	public @Getter IntConsumer startSubtreeFunc;
 	public @Getter IntConsumer endSubtreeFunc;
 
 
-	public AbstractTreeTraverseParameters(T tree, boolean onlyVisitLeaves, Predicate<T> hasChildren,
+	public AbstractTreeTraverseParameters(T tree, boolean onlyVisitLeaves, boolean skipNullRoot, Predicate<T> hasChildren,
 			Function<T, C> childrenGetter, IntConsumer startSubtreeFunc, IntConsumer endSubtreeFunc) {
 		this.tree = tree;
 		this.onlyVisitLeaves = onlyVisitLeaves;
+		this.skipNullRoot = skipNullRoot;
 		this.hasChildren = hasChildren;
 		this.childrenGetter = childrenGetter;
 		this.startSubtreeFunc = startSubtreeFunc;
@@ -40,6 +43,12 @@ public abstract class AbstractTreeTraverseParameters<T, C extends Iterable<T>> {
 
 	public AbstractTreeTraverseParameters<T, C> setOnlyVisitLeaves(boolean onlyVisitLeaves) {
 		this.onlyVisitLeaves = onlyVisitLeaves;
+		return this;
+	}
+
+
+	public AbstractTreeTraverseParameters<T, C> setSkipNullRoot(boolean skipNullRoot) {
+		this.skipNullRoot = skipNullRoot;
 		return this;
 	}
 
