@@ -7,6 +7,7 @@ import java.util.function.Predicate;
 
 import lombok.val;
 import twg2.treeLike.TreePathConsumer;
+import twg2.treeLike.TreeTraversalOrder;
 
 /**
  * @author TeamworkGuy2
@@ -34,9 +35,9 @@ public class TreePathTraverseParameters<T> extends AbstractTreeTraverseParameter
 
 
 	@SuppressWarnings("unchecked")
-	public TreePathTraverseParameters(T tree, boolean onlyVisitLeaves, Predicate<T> hasChildren, Function<T, ? extends Collection<T>> childrenGetter,
+	public TreePathTraverseParameters(T tree, boolean onlyVisitLeaves, TreeTraversalOrder traversalOrder, Predicate<T> hasChildren, Function<T, ? extends Collection<T>> childrenGetter,
 			TreePathConsumer<T> consumer, IntConsumer startSubtreeFunc, IntConsumer endSubtreeFunc) {
-		super(tree, onlyVisitLeaves, false, hasChildren, (Function<T, Collection<T>>) childrenGetter, startSubtreeFunc, endSubtreeFunc);
+		super(tree, onlyVisitLeaves, false, traversalOrder, hasChildren, (Function<T, Collection<T>>) childrenGetter, startSubtreeFunc, endSubtreeFunc);
 		this.consumer = consumer;
 	}
 
@@ -52,20 +53,20 @@ public class TreePathTraverseParameters<T> extends AbstractTreeTraverseParameter
 	}
 
 
-	public static <_T> TreePathTraverseParameters<_T> of(_T tree, boolean onlyVisitLeaves, Predicate<_T> hasChildren, Function<_T, ? extends Collection<_T>> childrenGetter) {
-		val params = new TreePathTraverseParameters<_T>(tree, onlyVisitLeaves, hasChildren, childrenGetter, null, null, null);
+	public static <_T> TreePathTraverseParameters<_T> of(_T tree, boolean onlyVisitLeaves, TreeTraversalOrder traversalOrder, Predicate<_T> hasChildren, Function<_T, ? extends Collection<_T>> childrenGetter) {
+		val params = new TreePathTraverseParameters<_T>(tree, onlyVisitLeaves, traversalOrder, hasChildren, childrenGetter, null, null, null);
 		return params;
 	}
 
 
-	public static <_T> TreePathTraverseParameters<_T> leafNodes(_T tree, Predicate<_T> hasChildren, Function<_T, ? extends Collection<_T>> childrenGetter) {
-		val params = new TreePathTraverseParameters<_T>(tree, true, hasChildren, childrenGetter, null, null, null);
+	public static <_T> TreePathTraverseParameters<_T> leafNodes(_T tree, TreeTraversalOrder traversalOrder, Predicate<_T> hasChildren, Function<_T, ? extends Collection<_T>> childrenGetter) {
+		val params = new TreePathTraverseParameters<_T>(tree, true, traversalOrder, hasChildren, childrenGetter, null, null, null);
 		return params;
 	}
 
 
-	public static <_T> TreePathTraverseParameters<_T> allNodes(_T tree, Predicate<_T> hasChildren, Function<_T, ? extends Collection<_T>> childrenGetter) {
-		val params = new TreePathTraverseParameters<_T>(tree, false, hasChildren, childrenGetter, null, null, null);
+	public static <_T> TreePathTraverseParameters<_T> allNodes(_T tree, TreeTraversalOrder traversalOrder, Predicate<_T> hasChildren, Function<_T, ? extends Collection<_T>> childrenGetter) {
+		val params = new TreePathTraverseParameters<_T>(tree, false, traversalOrder, hasChildren, childrenGetter, null, null, null);
 		return params;
 	}
 

@@ -10,6 +10,7 @@ import twg2.treeLike.SubtreeTransformer;
 import twg2.treeLike.TreeLike;
 import twg2.treeLike.TreeRemove;
 import twg2.treeLike.TreeTransform;
+import twg2.treeLike.TreeTraversalOrder;
 import twg2.treeLike.TreeTraverse;
 import twg2.treeLike.parameters.IndexedTreeTraverseParameters;
 import twg2.treeLike.parameters.SimpleTreeTraverseParameters;
@@ -26,36 +27,36 @@ public class SimpleTreeUtil {
 
 
 	// simple indexed tree traversal
-	public static <D> void traverseLeafNodes(SimpleTree<D> tree, IndexedSubtreeConsumer<D> consumer) {
-		traverseLeafNodes(tree, consumer, null, null);
+	public static <D> void traverseLeafNodes(SimpleTree<D> tree, TreeTraversalOrder traversalOrder, IndexedSubtreeConsumer<D> consumer) {
+		traverseLeafNodes(tree, traversalOrder, consumer, null, null);
 	}
 
-	public static <D> void traverseLeafNodes(SimpleTree<D> tree, IndexedSubtreeConsumer<D> consumer, IntConsumer startNodeFunc, IntConsumer endNodeFunc) {
-		TreeTraverse.Indexed.traverse(SimpleTreeTraverseParameters.leafNodes(tree)
+	public static <D> void traverseLeafNodes(SimpleTree<D> tree, TreeTraversalOrder traversalOrder, IndexedSubtreeConsumer<D> consumer, IntConsumer startNodeFunc, IntConsumer endNodeFunc) {
+		TreeTraverse.Indexed.traverse(SimpleTreeTraverseParameters.leafNodes(tree, traversalOrder)
 				.setConsumerSimpleTree(consumer)
 				.setStartSubtreeFunc(startNodeFunc)
 				.setEndSubtreeFunc(endNodeFunc));
 	}
 
 
-	public static <D> void traverseAllNodes(SimpleTree<D> tree, IndexedSubtreeConsumer<D> consumer) {
-		traverseAllNodes(tree, consumer, null, null);
+	public static <D> void traverseAllNodes(SimpleTree<D> tree, TreeTraversalOrder traversalOrder, IndexedSubtreeConsumer<D> consumer) {
+		traverseAllNodes(tree, traversalOrder, consumer, null, null);
 	}
 
-	public static <D> void traverseAllNodes(SimpleTree<D> tree, IndexedSubtreeConsumer<D> consumer, IntConsumer startNodeFunc, IntConsumer endNodeFunc) {
-		TreeTraverse.Indexed.traverse(SimpleTreeTraverseParameters.allNodes(tree)
+	public static <D> void traverseAllNodes(SimpleTree<D> tree, TreeTraversalOrder traversalOrder, IndexedSubtreeConsumer<D> consumer, IntConsumer startNodeFunc, IntConsumer endNodeFunc) {
+		TreeTraverse.Indexed.traverse(SimpleTreeTraverseParameters.allNodes(tree, traversalOrder)
 				.setConsumerSimpleTree(consumer)
 				.setStartSubtreeFunc(startNodeFunc)
 				.setEndSubtreeFunc(endNodeFunc));
 	}
 
 
-	public static <D> void traverseNodesDepthFirst(SimpleTree<D> tree, IndexedSubtreeConsumer<D> consumer) {
-		traverseNodesDepthFirst(tree, consumer, null, null);
+	public static <D> void traverseNodesDepthFirst(SimpleTree<D> tree, TreeTraversalOrder traversalOrder, IndexedSubtreeConsumer<D> consumer) {
+		traverseNodesDepthFirst(tree, traversalOrder, consumer, null, null);
 	}
 
-	public static <D> void traverseNodesDepthFirst(SimpleTree<D> tree, IndexedSubtreeConsumer<D> consumer, IntConsumer startNodeFunc, IntConsumer endNodeFunc) {
-		TreeTraverse.Indexed.traverseNodesDepthFirst(IndexedTreeTraverseParameters.allNodes(tree,
+	public static <D> void traverseNodesDepthFirst(SimpleTree<D> tree, TreeTraversalOrder traversalOrder, IndexedSubtreeConsumer<D> consumer, IntConsumer startNodeFunc, IntConsumer endNodeFunc) {
+		TreeTraverse.Indexed.traverseNodesDepthFirst(IndexedTreeTraverseParameters.allNodes(tree, traversalOrder,
 				(t) -> t.hasChildren(),
 				(t) -> t.getChildren())
 			.setConsumerIndexed((t, i, s, d, p) -> {
@@ -66,12 +67,12 @@ public class SimpleTreeUtil {
 	}
 
 
-	public static <D, S extends TreeLike<D, S>> void traverseLeafNodes(S tree, SubtreeConsumer<D> consumer) {
-		traverseLeafNodes(tree, consumer, null, null);
+	public static <D, S extends TreeLike<D, S>> void traverseLeafNodes(S tree, TreeTraversalOrder traversalOrder, SubtreeConsumer<D> consumer) {
+		traverseLeafNodes(tree, traversalOrder, consumer, null, null);
 	}
 
-	public static <D, S extends TreeLike<D, S>> void traverseLeafNodes(S tree, SubtreeConsumer<D> consumer, IntConsumer startNodeFunc, IntConsumer endNodeFunc) {
-		TreeTraverse.traverse(TreeTraverseParameters.leafNodes(tree,
+	public static <D, S extends TreeLike<D, S>> void traverseLeafNodes(S tree, TreeTraversalOrder traversalOrder, SubtreeConsumer<D> consumer, IntConsumer startNodeFunc, IntConsumer endNodeFunc) {
+		TreeTraverse.traverse(TreeTraverseParameters.leafNodes(tree, traversalOrder,
 					(t) -> t.hasChildren(),
 					(t) -> t.getChildren())
 				.setConsumer((t, d, p) -> consumer.accept(t.getData(), d, p != null ? p.getData() : null))
@@ -80,12 +81,12 @@ public class SimpleTreeUtil {
 	}
 
 
-	public static <D, S extends TreeLike<D, S>> void traverseAllNodes(S tree, SubtreeConsumer<D> consumer) {
-		traverseAllNodes(tree, consumer, null, null);
+	public static <D, S extends TreeLike<D, S>> void traverseAllNodes(S tree, TreeTraversalOrder traversalOrder, SubtreeConsumer<D> consumer) {
+		traverseAllNodes(tree, traversalOrder, consumer, null, null);
 	}
 
-	public static <D, S extends TreeLike<D, S>> void traverseAllNodes(S tree, SubtreeConsumer<D> consumer, IntConsumer startNodeFunc, IntConsumer endNodeFunc) {
-		TreeTraverse.traverse(TreeTraverseParameters.allNodes(tree,
+	public static <D, S extends TreeLike<D, S>> void traverseAllNodes(S tree, TreeTraversalOrder traversalOrder, SubtreeConsumer<D> consumer, IntConsumer startNodeFunc, IntConsumer endNodeFunc) {
+		TreeTraverse.traverse(TreeTraverseParameters.allNodes(tree, traversalOrder,
 					(t) -> t.hasChildren(),
 					(t) -> t.getChildren())
 				.setConsumer((t, d, p) -> consumer.accept(t.getData(), d, p != null ? p.getData() : null))
@@ -106,9 +107,9 @@ public class SimpleTreeUtil {
 	}
 
 
-	public static <D> void retrieveNodesByDepth(SimpleTree<D> tree, boolean consumeOnlyLeafNodes, List<List<D>> dst) {
+	public static <D> void retrieveNodesByDepth(SimpleTree<D> tree, boolean consumeOnlyLeafNodes, TreeTraversalOrder traversalOrder, List<List<D>> dst) {
 		List<List<SimpleTree<D>>> tmpDst = new ArrayList<>();
-		TreeTraverse.treeToDepthLists(IndexedTreeTraverseParameters.of(tree, consumeOnlyLeafNodes,
+		TreeTraverse.treeToDepthLists(IndexedTreeTraverseParameters.of(tree, consumeOnlyLeafNodes, traversalOrder,
 				(t) -> t.hasChildren(),
 				(t) -> t.getChildren()), tmpDst);
 

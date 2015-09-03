@@ -10,6 +10,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import twg2.collections.util.ListUtil;
+import twg2.treeLike.TreeTraversalOrder;
 import twg2.treeLike.TreeTraverse;
 import twg2.treeLike.parameters.TreePathTraverseParameters;
 import twg2.treeLike.simpleTree.SimpleTree;
@@ -63,9 +64,9 @@ public class SimpleTreeTest {
 	public void testTraverseNodesParents() {
 		SimpleTree<String> tree = createTree();
 
-		Map<String, List<String>> tmpParentsByLeaf = new HashMap<>(TreeDataTest.RandomObjects.getParentsByLeaf());
+		Map<String, List<String>> tmpParentsByLeaf = new HashMap<>(TreeData.RandomObjects.getParentsByLeaf());
 
-		TreeTraverse.traverseTreeWithPath(TreePathTraverseParameters.of(tree, true, (t) -> t.hasChildren(), (t) -> t.getChildren())
+		TreeTraverse.traverseTreeWithPath(TreePathTraverseParameters.of(tree, true, TreeTraversalOrder.POST_ORDER, (t) -> t.hasChildren(), (t) -> t.getChildren())
 			.setConsumerTreePath((branch, depth, parents) -> {
 				List<String> expectedParents = tmpParentsByLeaf.remove(branch.getData());
 				List<String> parentsData = ListUtil.map(parents, (p) -> p.getData());
@@ -80,9 +81,9 @@ public class SimpleTreeTest {
 		SimpleTree<String> tree = createTree();
 		List<List<String>> dst = new ArrayList<>();
 
-		SimpleTreeUtil.retrieveNodesByDepth(tree, false, dst);
+		SimpleTreeUtil.retrieveNodesByDepth(tree, false, TreeTraversalOrder.POST_ORDER, dst);
 
-		Assert.assertEquals(TreeDataTest.RandomObjects.getTagsByLevel(), dst);
+		Assert.assertEquals(TreeData.RandomObjects.getTagsByLevel(), dst);
 	}
 
 
@@ -91,11 +92,11 @@ public class SimpleTreeTest {
 		SimpleTree<String> tree = createTree();
 		List<List<String>> dst = createEmptyTagLevelContainer();
 
-		SimpleTreeUtil.traverseNodesDepthFirst(tree, (branch, index, size, depth, parentBranch) -> {
+		SimpleTreeUtil.traverseNodesDepthFirst(tree, TreeTraversalOrder.POST_ORDER, (branch, index, size, depth, parentBranch) -> {
 			dst.get(depth).add(branch);
 		});
 
-		Assert.assertEquals(TreeDataTest.RandomObjects.getTagsByLevel(), dst);
+		Assert.assertEquals(TreeData.RandomObjects.getTagsByLevel(), dst);
 	}
 
 
@@ -104,7 +105,7 @@ public class SimpleTreeTest {
 		SimpleTree<String> tree = createTree();
 		List<List<String>> allNodes = new ArrayList<>();
 
-		SimpleTreeUtil.retrieveNodesByDepth(tree, false, allNodes);
+		SimpleTreeUtil.retrieveNodesByDepth(tree, false, TreeTraversalOrder.POST_ORDER, allNodes);
 
 		List<List<String>> removedNodes = createEmptyTagLevelContainer();
 		SimpleTreeUtil.removeNodesByDepth(tree, false, (branch, depth, parentBranch) -> {
@@ -118,14 +119,14 @@ public class SimpleTreeTest {
 
 	static SimpleTree<String> createTree() {
 		SimpleTree<String> tree = new SimpleTreeImpl<>("root");
-		TreeDataTest.RandomObjects.addTreeTags(tree);
+		TreeData.RandomObjects.addTreeTags(tree);
 		return tree;
 	}
 
 
 	static List<List<String>> createEmptyTagLevelContainer() {
 		List<List<String>> dst = new ArrayList<>();
-		for(int i = 0, size = TreeDataTest.RandomObjects.getTagsByLevel().size(); i < size; i++) {
+		for(int i = 0, size = TreeData.RandomObjects.getTagsByLevel().size(); i < size; i++) {
 			dst.add(new ArrayList<>());
 		}
 		return dst;

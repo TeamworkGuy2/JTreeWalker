@@ -7,12 +7,13 @@ import java.util.Map;
 import twg2.collections.tuple.Tuples;
 import twg2.collections.util.MapBuilder;
 import twg2.treeLike.simpleTree.SimpleTree;
+import twg2.treeLike.simpleTree.SimpleTreeImpl;
 
 /**
  * @author TeamworkGuy2
  * @since 2015-7-1
  */
-public class TreeDataTest {
+public class TreeData {
 
 	public static class RandomObjects {
 		/*
@@ -41,6 +42,38 @@ public class TreeDataTest {
 				Tuples.of("Granite", Arrays.asList("Rocks", "root"))
 		);
 
+		private static List<String> randomObjsPostOrder = Arrays.asList(
+				"indoor",
+				"outdoor",
+				"Chair",
+				"Stool",
+				"A",
+				"Granite",
+				"Rocks",
+				"1701-D",
+				"Enterprise",
+				"Hyperion",
+				"Battlecruiser",
+				"Starship",
+				"B"
+		);
+
+		private static List<String> randomObjsPreOrder = Arrays.asList(
+				"A",
+				"Chair",
+				"indoor",
+				"outdoor",
+				"Stool",
+				"Rocks",
+				"Granite",
+				"B",
+				"Starship",
+				"Battlecruiser",
+				"Enterprise",
+				"1701-D",
+				"Hyperion"
+		);
+
 
 		public static List<List<String>> getTagsByLevel() {
 			return randomObjsTagsByLevel;
@@ -52,8 +85,25 @@ public class TreeDataTest {
 		}
 
 
+		public static List<String> getPreOrderTags() {
+			return randomObjsPreOrder;
+		}
+
+
+		public static List<String> getPostOrderTags() {
+			return randomObjsPostOrder;
+		}
+
+
+		public static SimpleTree<String> createTreeTags() {
+			SimpleTree<String> tree = new SimpleTreeImpl<String>(null);
+			addTreeTags(tree);
+			return tree;
+		}
+
+
 		@SuppressWarnings("unused")
-		static void addTreeTags(SimpleTree<String> rootTree) {
+		public static void addTreeTags(SimpleTree<String> rootTree) {
 			/*
 			Panel layout:
 			             A            Rocks               B

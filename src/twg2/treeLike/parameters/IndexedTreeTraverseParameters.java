@@ -7,6 +7,7 @@ import java.util.function.Predicate;
 
 import lombok.val;
 import twg2.treeLike.IndexedSubtreeConsumer;
+import twg2.treeLike.TreeTraversalOrder;
 
 /**
  * @author TeamworkGuy2
@@ -33,16 +34,16 @@ public class IndexedTreeTraverseParameters<T> extends AbstractTreeTraverseParame
 	public IndexedTreeTraverseParameters<T> setEndSubtreeFunc(IntConsumer endSubtreeFunc) { super.setEndSubtreeFunc(endSubtreeFunc); return this; }
 
 
-	public IndexedTreeTraverseParameters(T tree, boolean onlyVisitLeaves, Predicate<T> hasChildren, Function<T, ? extends List<T>> childrenGetter,
+	public IndexedTreeTraverseParameters(T tree, boolean onlyVisitLeaves, TreeTraversalOrder traversalOrder, Predicate<T> hasChildren, Function<T, ? extends List<T>> childrenGetter,
 			IndexedSubtreeConsumer<T> consumer, IntConsumer startSubtreeFunc, IntConsumer endSubtreeFunc) {
-		this(tree, onlyVisitLeaves, false, hasChildren, childrenGetter, consumer, startSubtreeFunc, endSubtreeFunc);
+		this(tree, onlyVisitLeaves, false, traversalOrder, hasChildren, childrenGetter, consumer, startSubtreeFunc, endSubtreeFunc);
 	}
 
 
 	@SuppressWarnings("unchecked")
-	public IndexedTreeTraverseParameters(T tree, boolean onlyVisitLeaves, boolean skipNullRoot, Predicate<T> hasChildren, Function<T, ? extends List<T>> childrenGetter,
+	public IndexedTreeTraverseParameters(T tree, boolean onlyVisitLeaves, boolean skipNullRoot, TreeTraversalOrder traversalOrder, Predicate<T> hasChildren, Function<T, ? extends List<T>> childrenGetter,
 			IndexedSubtreeConsumer<T> consumer, IntConsumer startSubtreeFunc, IntConsumer endSubtreeFunc) {
-		super(tree, onlyVisitLeaves, skipNullRoot, hasChildren, (Function<T, List<T>>) childrenGetter, startSubtreeFunc, endSubtreeFunc);
+		super(tree, onlyVisitLeaves, skipNullRoot, traversalOrder, hasChildren, (Function<T, List<T>>) childrenGetter, startSubtreeFunc, endSubtreeFunc);
 		this.consumer = consumer;
 	}
 
@@ -58,20 +59,20 @@ public class IndexedTreeTraverseParameters<T> extends AbstractTreeTraverseParame
 	}
 
 
-	public static <_T> IndexedTreeTraverseParameters<_T> of(_T tree, boolean onlyVisitLeaves, Predicate<_T> hasChildren, Function<_T, ? extends List<_T>> childrenGetter) {
-		val params = new IndexedTreeTraverseParameters<_T>(tree, onlyVisitLeaves, hasChildren, childrenGetter, null, null, null);
+	public static <_T> IndexedTreeTraverseParameters<_T> of(_T tree, boolean onlyVisitLeaves, TreeTraversalOrder traversalOrder, Predicate<_T> hasChildren, Function<_T, ? extends List<_T>> childrenGetter) {
+		val params = new IndexedTreeTraverseParameters<_T>(tree, onlyVisitLeaves, traversalOrder, hasChildren, childrenGetter, null, null, null);
 		return params;
 	}
 
 
-	public static <_T> IndexedTreeTraverseParameters<_T> leafNodes(_T tree, Predicate<_T> hasChildren, Function<_T, ? extends List<_T>> childrenGetter) {
-		val params = new IndexedTreeTraverseParameters<_T>(tree, true, hasChildren, childrenGetter, null, null, null);
+	public static <_T> IndexedTreeTraverseParameters<_T> leafNodes(_T tree, TreeTraversalOrder traversalOrder, Predicate<_T> hasChildren, Function<_T, ? extends List<_T>> childrenGetter) {
+		val params = new IndexedTreeTraverseParameters<_T>(tree, true, traversalOrder, hasChildren, childrenGetter, null, null, null);
 		return params;
 	}
 
 
-	public static <_T> IndexedTreeTraverseParameters<_T> allNodes(_T tree, Predicate<_T> hasChildren, Function<_T, ? extends List<_T>> childrenGetter) {
-		val params = new IndexedTreeTraverseParameters<_T>(tree, false, hasChildren, childrenGetter, null, null, null);
+	public static <_T> IndexedTreeTraverseParameters<_T> allNodes(_T tree, TreeTraversalOrder traversalOrder, Predicate<_T> hasChildren, Function<_T, ? extends List<_T>> childrenGetter) {
+		val params = new IndexedTreeTraverseParameters<_T>(tree, false, traversalOrder, hasChildren, childrenGetter, null, null, null);
 		return params;
 	}
 

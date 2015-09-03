@@ -7,6 +7,7 @@ import java.util.function.Predicate;
 
 import lombok.val;
 import twg2.treeLike.IndexedSubtreeConsumer;
+import twg2.treeLike.TreeTraversalOrder;
 import twg2.treeLike.simpleTree.SimpleTree;
 
 /**
@@ -34,15 +35,15 @@ public class SimpleTreeTraverseParameters<T> extends IndexedTreeTraverseParamete
 	public SimpleTreeTraverseParameters<T> setEndSubtreeFunc(IntConsumer endSubtreeFunc) { super.setEndSubtreeFunc(endSubtreeFunc); return this; }
 
 
-	public SimpleTreeTraverseParameters(SimpleTree<T> tree, boolean onlyVisitLeaves,
+	public SimpleTreeTraverseParameters(SimpleTree<T> tree, boolean onlyVisitLeaves, TreeTraversalOrder traversalOrder,
 			IndexedSubtreeConsumer<T> consumer, IntConsumer startSubtreeFunc, IntConsumer endSubtreeFunc) {
-		this(tree, onlyVisitLeaves, false, consumer, startSubtreeFunc, endSubtreeFunc);
+		this(tree, onlyVisitLeaves, false, traversalOrder, consumer, startSubtreeFunc, endSubtreeFunc);
 	}
 
 
-	public SimpleTreeTraverseParameters(SimpleTree<T> tree, boolean onlyVisitLeaves, boolean skipNullRoot,
+	public SimpleTreeTraverseParameters(SimpleTree<T> tree, boolean onlyVisitLeaves, boolean skipNullRoot, TreeTraversalOrder traversalOrder,
 			IndexedSubtreeConsumer<T> consumer, IntConsumer startSubtreeFunc, IntConsumer endSubtreeFunc) {
-		super(tree, onlyVisitLeaves, skipNullRoot, (t) -> t.hasChildren(), (t) -> t.getChildren(), null, startSubtreeFunc, endSubtreeFunc);
+		super(tree, onlyVisitLeaves, skipNullRoot, traversalOrder, (t) -> t.hasChildren(), (t) -> t.getChildren(), null, startSubtreeFunc, endSubtreeFunc);
 		this.setConsumerSimpleTree(consumer, skipNullRoot);
 	}
 
@@ -69,38 +70,38 @@ public class SimpleTreeTraverseParameters<T> extends IndexedTreeTraverseParamete
 	}
 
 
-	public static <_D> SimpleTreeTraverseParameters<_D> of(SimpleTree<_D> tree, boolean visitOnlyLeaves, boolean skipNonNull) {
-		val params = new SimpleTreeTraverseParameters<_D>(tree, visitOnlyLeaves, skipNonNull, null, null, null);
+	public static <_D> SimpleTreeTraverseParameters<_D> of(SimpleTree<_D> tree, boolean visitOnlyLeaves, boolean skipNonNull, TreeTraversalOrder traversalOrder) {
+		val params = new SimpleTreeTraverseParameters<_D>(tree, visitOnlyLeaves, skipNonNull, traversalOrder, null, null, null);
 		return params;
 	}
 
 
-	public static <_D> SimpleTreeTraverseParameters<_D> of(SimpleTree<_D> tree, boolean visitOnlyLeaves) {
-		val params = new SimpleTreeTraverseParameters<_D>(tree, visitOnlyLeaves, null, null, null);
+	public static <_D> SimpleTreeTraverseParameters<_D> of(SimpleTree<_D> tree, boolean visitOnlyLeaves, TreeTraversalOrder traversalOrder) {
+		val params = new SimpleTreeTraverseParameters<_D>(tree, visitOnlyLeaves, traversalOrder, null, null, null);
 		return params;
 	}
 
 
-	public static <_D> SimpleTreeTraverseParameters<_D> leafNodes(SimpleTree<_D> tree, boolean skipNullRoot) {
-		val params = new SimpleTreeTraverseParameters<_D>(tree, true, skipNullRoot, null, null, null);
+	public static <_D> SimpleTreeTraverseParameters<_D> leafNodes(SimpleTree<_D> tree, boolean skipNullRoot, TreeTraversalOrder traversalOrder) {
+		val params = new SimpleTreeTraverseParameters<_D>(tree, true, skipNullRoot, traversalOrder, null, null, null);
 		return params;
 	}
 
 
-	public static <_D> SimpleTreeTraverseParameters<_D> leafNodes(SimpleTree<_D> tree) {
-		val params = new SimpleTreeTraverseParameters<_D>(tree, true, null, null, null);
+	public static <_D> SimpleTreeTraverseParameters<_D> leafNodes(SimpleTree<_D> tree, TreeTraversalOrder traversalOrder) {
+		val params = new SimpleTreeTraverseParameters<_D>(tree, true, traversalOrder, null, null, null);
 		return params;
 	}
 
 
-	public static <_D> SimpleTreeTraverseParameters<_D> allNodes(SimpleTree<_D> tree, boolean skipNullRoot) {
-		val params = new SimpleTreeTraverseParameters<_D>(tree, false, skipNullRoot, null, null, null);
+	public static <_D> SimpleTreeTraverseParameters<_D> allNodes(SimpleTree<_D> tree, boolean skipNullRoot, TreeTraversalOrder traversalOrder) {
+		val params = new SimpleTreeTraverseParameters<_D>(tree, false, skipNullRoot, traversalOrder, null, null, null);
 		return params;
 	}
 
 
-	public static <_D> SimpleTreeTraverseParameters<_D> allNodes(SimpleTree<_D> tree) {
-		val params = new SimpleTreeTraverseParameters<_D>(tree, false, null, null, null);
+	public static <_D> SimpleTreeTraverseParameters<_D> allNodes(SimpleTree<_D> tree, TreeTraversalOrder traversalOrder) {
+		val params = new SimpleTreeTraverseParameters<_D>(tree, false, traversalOrder, null, null, null);
 		return params;
 	}
 
