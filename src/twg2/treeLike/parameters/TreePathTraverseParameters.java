@@ -14,7 +14,7 @@ import twg2.treeLike.TreeTraversalOrder;
  * @since 2015-9-1
  * @see AbstractTreeTraverseParameters
  */
-public class TreePathTraverseParameters<T> extends AbstractTreeTraverseParameters<T, Collection<T>> {
+public class TreePathTraverseParameters<T> extends AbstractTreeTraverseParameters<T, T, Collection<T>, TreePathConsumer<T>> {
 	// package-private
 	TreePathConsumer<T> consumer;
 
@@ -39,6 +39,18 @@ public class TreePathTraverseParameters<T> extends AbstractTreeTraverseParameter
 			TreePathConsumer<T> consumer, IntConsumer startSubtreeFunc, IntConsumer endSubtreeFunc) {
 		super(tree, onlyVisitLeaves, false, traversalOrder, hasChildren, (Function<T, Collection<T>>) childrenGetter, startSubtreeFunc, endSubtreeFunc);
 		this.consumer = consumer;
+	}
+
+
+	@Override
+	public TreePathConsumer<T> getConsumer() {
+		return this.consumer;
+	}
+
+
+	@Override
+	public TreePathTraverseParameters<T> setConsumer(TreePathConsumer<T> consumer) {
+		return setConsumerTreePath(consumer);
 	}
 
 

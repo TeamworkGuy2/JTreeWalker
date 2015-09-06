@@ -2,13 +2,13 @@ package twg2.treeLike.simpleTree;
 
 import java.util.List;
 
-import twg2.treeLike.TreeLike;
+import twg2.treeLike.IndexedTree;
 
 /**
  * @author TeamworkGuy2
  * @since 2015-5-28
  */
-public interface SimpleTree<T> extends TreeLike<T, SimpleTree<T>> {
+public interface SimpleTree<T> extends IndexedTree<T, SimpleTree<T>> {
 
 
 	@Override

@@ -1,73 +1,49 @@
 package twg2.treeLike.parameters;
 
-import java.util.Collection;
 import java.util.function.Function;
 import java.util.function.IntConsumer;
 import java.util.function.Predicate;
 
-import lombok.val;
-import twg2.treeLike.SubtreeConsumer;
-import twg2.treeLike.TreeTraversalOrder;
-
 /**
  * @author TeamworkGuy2
- * @since 2015-8-31
- * @see AbstractTreeTraverseParameters
+ * @since 2015-9-5
+ * @param <T> the type of data stored in this tree
+ * @param <S> the type of child
+ * @param <C> the type of child collection
+ * @param <F> the type of consumer function that visits each tree node
  */
-public class TreeTraverseParameters<T> extends AbstractTreeTraverseParameters<T, Collection<T>> {
-	// package-private
-	SubtreeConsumer<T> consumer;
+public interface TreeTraverseParameters<T, S, C extends Iterable<? extends S>, F> {
 
-	@Override
-	public TreeTraverseParameters<T> setTree(T tree) { super.setTree(tree); return this; }
-	@Override
-	public TreeTraverseParameters<T> setOnlyVisitLeaves(boolean onlyVisitLeaves) { super.setOnlyVisitLeaves(onlyVisitLeaves); return this; }
-	@Override
-	public TreeTraverseParameters<T> setSkipNullRoot(boolean skipNullRoot) { super.setSkipNullRoot(skipNullRoot); return this; }
-	@Override
-	public TreeTraverseParameters<T> setHasChildren(Predicate<T> hasChildren) { super.setHasChildren(hasChildren); return this; }
-	@Override
-	public TreeTraverseParameters<T> setChildrenGetter(Function<T, Collection<T>> childrenGetter) { super.setChildrenGetter(childrenGetter); return this; }
-	@Override
-	public TreeTraverseParameters<T> setStartSubtreeFunc(IntConsumer startSubtreeFunc) { super.setStartSubtreeFunc(startSubtreeFunc); return this; }
-	@Override
-	public TreeTraverseParameters<T> setEndSubtreeFunc(IntConsumer endSubtreeFunc) { super.setEndSubtreeFunc(endSubtreeFunc); return this; }
+	public F getConsumer();
 
+	public TreeTraverseParameters<T, S, C, F> setConsumer(F consumer);
 
-	@SuppressWarnings("unchecked")
-	public TreeTraverseParameters(T tree, boolean onlyVisitLeaves, TreeTraversalOrder traversalOrder, Predicate<T> hasChildren, Function<T, ? extends Collection<T>> childrenGetter,
-			SubtreeConsumer<T> consumer, IntConsumer startSubtreeFunc, IntConsumer endSubtreeFunc) {
-		super(tree, onlyVisitLeaves, false, traversalOrder, hasChildren, (Function<T, Collection<T>>) childrenGetter, startSubtreeFunc, endSubtreeFunc);
-		this.consumer = consumer;
-	}
+	public T getTree();
 
+	public TreeTraverseParameters<T, S, C, F> setTree(T tree);
 
-	public SubtreeConsumer<T> getConsumer() {
-		return this.consumer;
-	}
+	public boolean isOnlyVisitLeaves();
 
+	public TreeTraverseParameters<T, S, C, F> setOnlyVisitLeaves(boolean onlyVisitLeaves);
 
-	public TreeTraverseParameters<T> setConsumer(SubtreeConsumer<T> consumer) {
-		this.consumer = consumer;
-		return this;
-	}
+	public boolean isSkipNullRoot();
 
+	public TreeTraverseParameters<T, S, C, F> setSkipNullRoot(boolean skipNullRoot);
 
-	public static <_T> TreeTraverseParameters<_T> of(_T tree, boolean onlyVisitLeaves, TreeTraversalOrder traversalOrder, Predicate<_T> hasChildren, Function<_T, ? extends Collection<_T>> childrenGetter) {
-		val params = new TreeTraverseParameters<_T>(tree, onlyVisitLeaves, traversalOrder, hasChildren, childrenGetter, null, null, null);
-		return params;
-	}
+	public Predicate<T> getHasChildren();
 
+	public TreeTraverseParameters<T, S, C, F> setHasChildren(Predicate<T> hasChildren);
 
-	public static <_T> TreeTraverseParameters<_T> leafNodes(_T tree, TreeTraversalOrder traversalOrder, Predicate<_T> hasChildren, Function<_T, ? extends Collection<_T>> childrenGetter) {
-		val params = new TreeTraverseParameters<_T>(tree, true, traversalOrder, hasChildren, childrenGetter, null, null, null);
-		return params;
-	}
+	public Function<T, C> getChildrenGetter();
 
+	public TreeTraverseParameters<T, S, C, F> setChildrenGetter(Function<T, C> childrenGetter);
 
-	public static <_T> TreeTraverseParameters<_T> allNodes(_T tree, TreeTraversalOrder traversalOrder, Predicate<_T> hasChildren, Function<_T, ? extends Collection<_T>> childrenGetter) {
-		val params = new TreeTraverseParameters<_T>(tree, false, traversalOrder, hasChildren, childrenGetter, null, null, null);
-		return params;
-	}
+	public IntConsumer getStartSubtreeFunc();
+
+	public TreeTraverseParameters<T, S, C, F> setStartSubtreeFunc(IntConsumer startSubtreeFunc);
+
+	public IntConsumer getEndSubtreeFunc();
+
+	public TreeTraverseParameters<T, S, C, F> setEndSubtreeFunc(IntConsumer endSubtreeFunc);
 
 }

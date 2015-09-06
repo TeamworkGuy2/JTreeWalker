@@ -14,6 +14,7 @@ import twg2.treeLike.simpleTree.SimpleTree;
  * @author TeamworkGuy2
  * @since 2015-9-1
  * @see AbstractTreeTraverseParameters
+ * @see IndexedTreeTraverseParameters
  */
 public class SimpleTreeTraverseParameters<T> extends IndexedTreeTraverseParameters<SimpleTree<T>> {
 	// package-private

@@ -68,6 +68,12 @@ public class SimpleTreeImpl<T> implements SimpleTree<T> {
 	}
 
 
+	@Override
+	public int size() {
+		return children != null ? children.size() : 0;
+	}
+
+
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public List<SimpleTree<T>> getChildren() {

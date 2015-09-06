@@ -6,6 +6,7 @@ import java.util.Map;
 
 import twg2.collections.tuple.Tuples;
 import twg2.collections.util.MapBuilder;
+import twg2.treeLike.simpleTree.SimpleKeyTree;
 import twg2.treeLike.simpleTree.SimpleTree;
 import twg2.treeLike.simpleTree.SimpleTreeImpl;
 
@@ -24,7 +25,7 @@ public class TreeData {
 		                                    Enterprise   Hyperion
 		                                     1701-D
 		*/
-		private static List<List<String>> randomObjsTagsByLevel = Arrays.asList(
+		private static List<List<String>> tagsByLevel = Arrays.asList(
 				Arrays.asList("root"),
 				Arrays.asList("A", "Rocks", "B"),
 				Arrays.asList("Chair", "Stool", "Granite", "Starship"),
@@ -33,7 +34,7 @@ public class TreeData {
 				Arrays.asList("1701-D")
 		);
 
-		private static Map<String, List<String>> randomObjsParentsByLeaf = MapBuilder.of(
+		private static Map<String, List<String>> parentsByLeaf = MapBuilder.of(
 				Tuples.of("1701-D", Arrays.asList("Enterprise", "Battlecruiser", "Starship", "B", "root")),
 				Tuples.of("Hyperion", Arrays.asList("Battlecruiser", "Starship", "B", "root")),
 				Tuples.of("indoor", Arrays.asList("Chair", "A", "root")),
@@ -42,7 +43,7 @@ public class TreeData {
 				Tuples.of("Granite", Arrays.asList("Rocks", "root"))
 		);
 
-		private static List<String> randomObjsPostOrder = Arrays.asList(
+		private static List<String> postOrder = Arrays.asList(
 				"indoor",
 				"outdoor",
 				"Chair",
@@ -58,7 +59,7 @@ public class TreeData {
 				"B"
 		);
 
-		private static List<String> randomObjsPreOrder = Arrays.asList(
+		private static List<String> preOrder = Arrays.asList(
 				"A",
 				"Chair",
 				"indoor",
@@ -76,22 +77,22 @@ public class TreeData {
 
 
 		public static List<List<String>> getTagsByLevel() {
-			return randomObjsTagsByLevel;
+			return tagsByLevel;
 		}
 
 
 		public static Map<String, List<String>> getParentsByLeaf() {
-			return randomObjsParentsByLeaf;
+			return parentsByLeaf;
 		}
 
 
 		public static List<String> getPreOrderTags() {
-			return randomObjsPreOrder;
+			return preOrder;
 		}
 
 
 		public static List<String> getPostOrderTags() {
-			return randomObjsPostOrder;
+			return postOrder;
 		}
 
 
@@ -104,15 +105,6 @@ public class TreeData {
 
 		@SuppressWarnings("unused")
 		public static void addTreeTags(SimpleTree<String> rootTree) {
-			/*
-			Panel layout:
-			             A            Rocks               B
-			     Chair      Stool    Granite           Starship
-			indoor outdoor                          Battlecruiser
-			                                    Enterprise   Hyperion
-			                                     1701-D
-			*/
-
 			SimpleTree<String> a = rootTree.addChild("A");
 				SimpleTree<String> chair = a.addChild("Chair");
 					SimpleTree<String> indoor = chair.addChild("indoor");
@@ -128,6 +120,26 @@ public class TreeData {
 						SimpleTree<String> enterprise = battlecruiser.addChild("Enterprise");
 							SimpleTree<String> _1701_D = enterprise.addChild("1701-D");
 						SimpleTree<String> hyperion = battlecruiser.addChild("Hyperion");
+		}
+
+
+		@SuppressWarnings("unused")
+		public static void addKeyTreeTags(SimpleKeyTree<String, String> rootTree) {
+			SimpleKeyTree<String, String> a = rootTree.addChild("A", "A");
+				SimpleKeyTree<String, String> chair = a.addChild("Chair", "Chair");
+					SimpleKeyTree<String, String> indoor = chair.addChild("indoor", "indoor");
+					SimpleKeyTree<String, String> outdoor = chair.addChild("outdoor", "outdoor");
+				SimpleKeyTree<String, String> stool = a.addChild("Stool", "Stool");
+
+			SimpleKeyTree<String, String> rocks = rootTree.addChild("Rocks", "Rocks");
+				SimpleKeyTree<String, String> granite = rocks.addChild("Granite", "Granite");
+
+			SimpleKeyTree<String, String> b = rootTree.addChild("B", "B");
+				SimpleKeyTree<String, String> starship = b.addChild("Starship", "Starship");
+					SimpleKeyTree<String, String> battlecruiser = starship.addChild("Battlecruiser", "Battlecruiser");
+						SimpleKeyTree<String, String> enterprise = battlecruiser.addChild("Enterprise", "Enterprise");
+							SimpleKeyTree<String, String> _1701_D = enterprise.addChild("1701-D", "1701-D");
+						SimpleKeyTree<String, String> hyperion = battlecruiser.addChild("Hyperion", "Hyperion");
 		}
 
 	}

@@ -14,7 +14,7 @@ import twg2.treeLike.TreeTraversalOrder;
  * @since 2015-8-31
  * @param <T> the type of data in each tree node
  */
-public class IndexedTreeTraverseParameters<T> extends AbstractTreeTraverseParameters<T, List<T>> {
+public class IndexedTreeTraverseParameters<T> extends AbstractTreeTraverseParameters<T, T, List<T>, IndexedSubtreeConsumer<T>> {
 	// package-private
 	IndexedSubtreeConsumer<T> consumer;
 
@@ -45,6 +45,18 @@ public class IndexedTreeTraverseParameters<T> extends AbstractTreeTraverseParame
 			IndexedSubtreeConsumer<T> consumer, IntConsumer startSubtreeFunc, IntConsumer endSubtreeFunc) {
 		super(tree, onlyVisitLeaves, skipNullRoot, traversalOrder, hasChildren, (Function<T, List<T>>) childrenGetter, startSubtreeFunc, endSubtreeFunc);
 		this.consumer = consumer;
+	}
+
+
+	@Override
+	public IndexedSubtreeConsumer<T> getConsumer() {
+		return this.consumer;
+	}
+
+
+	@Override
+	public IndexedTreeTraverseParameters<T> setConsumer(IndexedSubtreeConsumer<T> consumer) {
+		return setConsumerIndexed(consumer);
 	}
 
 

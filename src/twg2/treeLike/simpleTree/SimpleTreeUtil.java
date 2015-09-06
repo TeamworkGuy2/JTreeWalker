@@ -14,7 +14,7 @@ import twg2.treeLike.TreeTraversalOrder;
 import twg2.treeLike.TreeTraverse;
 import twg2.treeLike.parameters.IndexedTreeTraverseParameters;
 import twg2.treeLike.parameters.SimpleTreeTraverseParameters;
-import twg2.treeLike.parameters.TreeTraverseParameters;
+import twg2.treeLike.parameters.TreeTraverseParametersImpl;
 
 
 /**
@@ -72,7 +72,7 @@ public class SimpleTreeUtil {
 	}
 
 	public static <D, S extends TreeLike<D, S>> void traverseLeafNodes(S tree, TreeTraversalOrder traversalOrder, SubtreeConsumer<D> consumer, IntConsumer startNodeFunc, IntConsumer endNodeFunc) {
-		TreeTraverse.traverse(TreeTraverseParameters.leafNodes(tree, traversalOrder,
+		TreeTraverse.traverse(TreeTraverseParametersImpl.leafNodes(tree, traversalOrder,
 					(t) -> t.hasChildren(),
 					(t) -> t.getChildren())
 				.setConsumer((t, d, p) -> consumer.accept(t.getData(), d, p != null ? p.getData() : null))
@@ -86,7 +86,7 @@ public class SimpleTreeUtil {
 	}
 
 	public static <D, S extends TreeLike<D, S>> void traverseAllNodes(S tree, TreeTraversalOrder traversalOrder, SubtreeConsumer<D> consumer, IntConsumer startNodeFunc, IntConsumer endNodeFunc) {
-		TreeTraverse.traverse(TreeTraverseParameters.allNodes(tree, traversalOrder,
+		TreeTraverse.traverse(TreeTraverseParametersImpl.allNodes(tree, traversalOrder,
 					(t) -> t.hasChildren(),
 					(t) -> t.getChildren())
 				.setConsumer((t, d, p) -> consumer.accept(t.getData(), d, p != null ? p.getData() : null))
@@ -100,7 +100,7 @@ public class SimpleTreeUtil {
 	}
 
 	public static <D, S extends TreeLike<D, S>, R> void transformTree(S tree, R treeTransformed, SubtreeTransformer<S, R> transformer, SubtreeConsumer<R> consumer, IntConsumer startNodeFunc, IntConsumer endNodeFunc) {
-		TreeTransform.transformTree(tree, treeTransformed,
+		TreeTransform.traverseTransformTree(tree, treeTransformed,
 				transformer,
 				(t) -> t.hasChildren(),
 				(t) -> t.getChildren(), consumer, startNodeFunc, endNodeFunc);

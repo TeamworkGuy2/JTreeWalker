@@ -1,7 +1,9 @@
 package twg2.treeLike.test;
 
 import java.util.AbstractMap;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.junit.Assert;
@@ -22,16 +24,42 @@ import twg2.treeLike.simpleTree.SimpleTreeImpl;
 public class TreeTransformTest {
 
 	@Test
-	public void testTransform() {
+	public void testTraverseTransform() {
 		SimpleTree<String> tree = new SimpleTreeImpl<>(null);
 		TreeData.RandomObjects.addTreeTags(tree);
 
-		TreeTransform.transformTree(tree, null,
+		System.out.println("==== testTraverseTransform() ====");
+
+		TreeTransform.traverseTransformTree(tree, null,
 				(str, parent, parentTransformed) -> new AbstractMap.SimpleImmutableEntry<>(str.hashCode(), new StringBuilder(str.getData())),
 				(t) -> t.hasChildren(),
 				(t) -> t.getChildren(), (branch, depth, parent) -> {
 			System.out.println("got (" + depth + "): " + branch + "\t,\t" + parent);
 		});
+
+		System.out.println();
+	}
+
+
+	@Test
+	public void testTransform() {
+		SimpleTree<String> tree = new SimpleTreeImpl<>(null);
+		TreeData.RandomObjects.addTreeTags(tree);
+
+		SimpleTree<Map.Entry<Integer, StringBuilder>> copy = TreeTransform.transformSimpleTree(tree,
+				(str, parent, parentTransformed) -> new AbstractMap.SimpleImmutableEntry<>(str.hashCode(), new StringBuilder(str)),
+				(branch, depth, parent) -> {
+			System.out.println("got (" + depth + "): " + branch + "\t,\t" + parent);
+		});
+
+		ArrayList<String> leavesPreOrder = new ArrayList<>();
+
+		TreeTraverse.Indexed.traverse(SimpleTreeTraverseParameters.allNodes(copy, TreeTraversalOrder.PRE_ORDER)
+			.setConsumerSimpleTree((branch, index, size, depth, parentBranch) -> {
+				leavesPreOrder.add(branch.getValue().toString());
+			}, true));
+
+		Assert.assertEquals(TreeData.RandomObjects.getPreOrderTags(), leavesPreOrder);
 	}
 
 
@@ -40,6 +68,8 @@ public class TreeTransformTest {
 		SimpleTree<String> tree = TreeData.RandomObjects.createTreeTags();
 		List<String> preOrderTags = TreeData.RandomObjects.getPreOrderTags();
 		AtomicInteger i = new AtomicInteger();
+
+		System.out.println("==== testPreOrder() ====");
 
 		TreeTraverse.Indexed.traverse(SimpleTreeTraverseParameters.allNodes(tree, true, TreeTraversalOrder.PRE_ORDER)
 			.setConsumerSimpleTree((branch, index, size, depth, parentBranch) -> {
@@ -51,6 +81,8 @@ public class TreeTransformTest {
 				Assert.assertEquals(expectTag, branch);
 				i.incrementAndGet();
 			}));
+
+		System.out.println();
 	}
 
 
@@ -59,6 +91,8 @@ public class TreeTransformTest {
 		SimpleTree<String> tree = TreeData.RandomObjects.createTreeTags();
 		List<String> postOrderTags = TreeData.RandomObjects.getPostOrderTags();
 		AtomicInteger i = new AtomicInteger();
+
+		System.out.println("==== testPostOrder() ====");
 
 		TreeTraverse.Indexed.traverse(SimpleTreeTraverseParameters.allNodes(tree, true, TreeTraversalOrder.POST_ORDER)
 			.setConsumerSimpleTree((branch, index, size, depth, parentBranch) -> {
@@ -70,6 +104,8 @@ public class TreeTransformTest {
 				Assert.assertEquals(expectTag, branch);
 				i.incrementAndGet();
 			}));
+
+		System.out.println();
 	}
 
 
@@ -78,7 +114,9 @@ public class TreeTransformTest {
 		SimpleTree<String> tree = new SimpleTreeImpl<>(null);
 		TreeData.RandomObjects.addTreeTags(tree);
 
-		TreePrint.printTree(SimpleTreeTraverseParameters.allNodes(tree, TreeTraversalOrder.PRE_ORDER), System.out);
+		System.out.println("==== testPrint() ====");
+		TreePrint.printTree(tree, System.out);
+		System.out.println();
 	}
 
 }
