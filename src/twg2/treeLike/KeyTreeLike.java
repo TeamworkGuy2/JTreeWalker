@@ -19,7 +19,7 @@ public interface KeyTreeLike<K, D, P extends KeyTreeLike<K, D, P>> {
 
 	public boolean hasChildren();
 
-	public Map<K, P> getChildren();
+	public Map<K, ? extends P> getChildren();
 
 	public P getChild(K key);
 

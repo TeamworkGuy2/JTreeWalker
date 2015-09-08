@@ -2,10 +2,12 @@ package twg2.treeLike;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.RandomAccess;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import twg2.treeLike.simpleTree.SimpleKeyTree;
 import twg2.treeLike.simpleTree.SimpleTree;
 import twg2.treeLike.simpleTree.SimpleTreeImpl;
 
@@ -74,6 +76,41 @@ public class TreeBuilder {
 
 				count++;
 			}
+		}
+
+		// post-order
+		if(count > 0) {
+			depth--;
+		}
+	}
+
+
+	public static <K, R> void buildTree(SimpleKeyTree<K, R> dstTree, int depth, Entry<K, R> parent, Entry<K, R> tree, Predicate<Entry<K, R>> hasChildren,
+			Function<Entry<K, R>, Iterable<Entry<K, R>>> childrenGetter, boolean consumeOnlyLeafNodes) {
+		if(!hasChildren.test(tree)) {
+			dstTree.addChild(tree);
+			// return early because no children
+			return;
+		}
+
+		SimpleKeyTree<K, R> subTree = null;
+		Iterable<Entry<K, R>> children = childrenGetter.apply(tree);
+		int count = 0;
+
+		for(Entry<K, R> subtree : children) {
+			if(count == 0) {
+				// pre-order
+				if(!consumeOnlyLeafNodes) {
+					subTree = dstTree.addChild(tree);
+				}
+				depth++;
+			}
+
+			if(subtree != null) {
+				buildTree(subTree, depth, tree, subtree, hasChildren, childrenGetter, consumeOnlyLeafNodes);
+			}
+
+			count++;
 		}
 
 		// post-order

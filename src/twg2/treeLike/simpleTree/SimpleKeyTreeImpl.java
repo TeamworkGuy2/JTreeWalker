@@ -8,7 +8,6 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import lombok.val;
-import twg2.treeLike.KeyTree;
 
 /**
  * @author TeamworkGuy2
@@ -86,8 +85,8 @@ public class SimpleKeyTreeImpl<K, D> implements SimpleKeyTree<K, D> {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Map<K, KeyTree<K, D>> getChildren() {
-		return (Map<K, KeyTree<K, D>>)(Map<K, ? extends SimpleKeyTree<K, D>>)children;
+	public Map<K, SimpleKeyTree<K, D>> getChildren() {
+		return (Map<K, SimpleKeyTree<K, D>>)(Map<K, ? extends SimpleKeyTree<K, D>>)children;
 	}
 
 
@@ -98,11 +97,30 @@ public class SimpleKeyTreeImpl<K, D> implements SimpleKeyTree<K, D> {
 
 
 	@Override
+	public SimpleKeyTreeImpl<K, D> addChild(Map.Entry<K, D> child) {
+		return addChild(child.getKey(), child.getValue());
+	}
+
+
+	@Override
 	public SimpleKeyTreeImpl<K, D> addChild(K childKey, D childData) {
-		lazyInitChildren((Map<K, D>)null);
 		SimpleKeyTreeImpl<K, D> newChild = newChild(childKey, childData);
-		this.children.put(childKey, newChild);
+		addChild(newChild);
 		return newChild;
+	}
+
+
+	public void addChild(SimpleKeyTreeImpl<K, D> child) {
+		addChild(null, child);
+	}
+
+
+	public void addChild(K key, SimpleKeyTreeImpl<K, D> child) {
+		lazyInitChildren((Map<K, D>)null);
+		if(key != null) {
+			child.key = key;
+		}
+		this.children.put(child.getKey(), child);
 	}
 
 
