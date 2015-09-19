@@ -25,6 +25,8 @@ public class SimpleTreeTraverseParameters<T> extends IndexedTreeTraverseParamete
 	@Override
 	public SimpleTreeTraverseParameters<T> setOnlyVisitLeaves(boolean onlyVisitLeaves) { super.setOnlyVisitLeaves(onlyVisitLeaves); return this; }
 	@Override
+	public SimpleTreeTraverseParameters<T> setSkipRoot(boolean skipRoot) { super.setSkipRoot(skipRoot); return this; }
+	@Override
 	public SimpleTreeTraverseParameters<T> setSkipNullRoot(boolean skipNullRoot) { super.setSkipNullRoot(skipNullRoot); return this; }
 	@Override
 	public SimpleTreeTraverseParameters<T> setHasChildren(Predicate<SimpleTree<T>> hasChildren) { super.setHasChildren(hasChildren); return this; }

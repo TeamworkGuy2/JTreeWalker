@@ -24,6 +24,8 @@ public class KeyTreeTraverseParameters<K, V> extends AbstractTreeTraverseParamet
 	@Override
 	public KeyTreeTraverseParameters<K, V> setOnlyVisitLeaves(boolean onlyVisitLeaves) { super.setOnlyVisitLeaves(onlyVisitLeaves); return this; }
 	@Override
+	public KeyTreeTraverseParameters<K, V> setSkipRoot(boolean skipRoot) { super.setSkipRoot(skipRoot); return this; }
+	@Override
 	public KeyTreeTraverseParameters<K, V> setSkipNullRoot(boolean skipNullRoot) { super.setSkipNullRoot(skipNullRoot); return this; }
 	@Override
 	public KeyTreeTraverseParameters<K, V> setHasChildren(Predicate<V> hasChildren) { super.setHasChildren(hasChildren); return this; }

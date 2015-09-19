@@ -6,6 +6,8 @@ import java.util.function.Predicate;
 
 import twg2.treeLike.TreeTraversalOrder;
 import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
 /**
  * @author TeamworkGuy2
@@ -14,16 +16,19 @@ import lombok.Getter;
  * @param <C> the type of children collection returned by the children getter
  * @param <F> the type of consumer function that visits each tree node
  */
+@Accessors(chain = true)
 public abstract class AbstractTreeTraverseParameters<T, S, C extends Iterable<? extends S>, F> implements TreeTraverseParameters<T, S, C, F> {
-	public @Getter T tree;
-	public @Getter boolean onlyVisitLeaves;
+	public @Getter @Setter T tree;
+	public @Getter @Setter boolean onlyVisitLeaves;
+	/** whether to skip the root node - default false */
+	public @Getter @Setter boolean skipRoot;
 	/** whether to skip null root node - default false */
-	public @Getter boolean skipNullRoot;
-	public @Getter TreeTraversalOrder traversalOrder;
-	public @Getter Predicate<T> hasChildren;
-	public @Getter Function<T, C> childrenGetter;
-	public @Getter IntConsumer startSubtreeFunc;
-	public @Getter IntConsumer endSubtreeFunc;
+	public @Getter @Setter boolean skipNullRoot;
+	public @Getter @Setter TreeTraversalOrder traversalOrder;
+	public @Getter @Setter Predicate<T> hasChildren;
+	public @Getter @Setter Function<T, C> childrenGetter;
+	public @Getter @Setter IntConsumer startSubtreeFunc;
+	public @Getter @Setter IntConsumer endSubtreeFunc;
 
 
 	public AbstractTreeTraverseParameters(T tree, boolean onlyVisitLeaves, boolean skipNullRoot, TreeTraversalOrder traversalOrder, Predicate<T> hasChildren,
@@ -38,7 +43,7 @@ public abstract class AbstractTreeTraverseParameters<T, S, C extends Iterable<? 
 		this.endSubtreeFunc = endSubtreeFunc;
 	}
 
-
+/*
 	@Override
 	public AbstractTreeTraverseParameters<T, S, C, F> setTree(T tree) {
 		this.tree = tree;
@@ -92,5 +97,5 @@ public abstract class AbstractTreeTraverseParameters<T, S, C extends Iterable<? 
 		this.endSubtreeFunc = endSubtreeFunc;
 		return this;
 	}
-
+*/
 }

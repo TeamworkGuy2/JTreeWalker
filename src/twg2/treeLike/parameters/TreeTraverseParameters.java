@@ -26,6 +26,10 @@ public interface TreeTraverseParameters<T, S, C extends Iterable<? extends S>, F
 
 	public TreeTraverseParameters<T, S, C, F> setOnlyVisitLeaves(boolean onlyVisitLeaves);
 
+	public boolean isSkipRoot();
+
+	public TreeTraverseParameters<T, S, C, F> setSkipRoot(boolean skipRoot);
+
 	public boolean isSkipNullRoot();
 
 	public TreeTraverseParameters<T, S, C, F> setSkipNullRoot(boolean skipNullRoot);

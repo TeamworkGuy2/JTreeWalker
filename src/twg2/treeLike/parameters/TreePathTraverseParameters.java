@@ -23,6 +23,8 @@ public class TreePathTraverseParameters<T> extends AbstractTreeTraverseParameter
 	@Override
 	public TreePathTraverseParameters<T> setOnlyVisitLeaves(boolean onlyVisitLeaves) { super.setOnlyVisitLeaves(onlyVisitLeaves); return this; }
 	@Override
+	public TreePathTraverseParameters<T> setSkipRoot(boolean skipRoot) { super.setSkipRoot(skipRoot); return this; }
+	@Override
 	public TreePathTraverseParameters<T> setSkipNullRoot(boolean skipNullRoot) { super.setSkipNullRoot(skipNullRoot); return this; }
 	@Override
 	public TreePathTraverseParameters<T> setHasChildren(Predicate<T> hasChildren) { super.setHasChildren(hasChildren); return this; }

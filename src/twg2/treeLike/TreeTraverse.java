@@ -41,19 +41,23 @@ public class TreeTraverse {
 
 
 		public static <R> void traversePostOrder(IndexedTreeTraverseParameters<R> params) {
-			Logic.traverseIndexedPostOrder(0, 1, 0, null, params.getTree(), params.isSkipNullRoot(), params.getHasChildren(), params.getChildrenGetter(), params.getConsumerIndexed(),
+			Logic.traverseIndexedPostOrder(0, 1, 0, null, params.getTree(), params.isSkipRoot(), params.isSkipNullRoot(),
+					params.getHasChildren(), params.getChildrenGetter(), params.getConsumerIndexed(),
 					params.isOnlyVisitLeaves(), params.getStartSubtreeFunc(), params.getEndSubtreeFunc());
 		}
 
 
 		public static <R> void traversePreOrder(IndexedTreeTraverseParameters<R> params) {
-			Logic.traverseIndexedPreOrder(0, 1, 0, null, params.getTree(), params.isSkipNullRoot(), params.getHasChildren(), params.getChildrenGetter(), params.getConsumerIndexed(),
+			Logic.traverseIndexedPreOrder(0, 1, 0, null, params.getTree(), params.isSkipRoot(), params.isSkipNullRoot(),
+					params.getHasChildren(), params.getChildrenGetter(), params.getConsumerIndexed(),
 					params.isOnlyVisitLeaves(), params.getStartSubtreeFunc(), params.getEndSubtreeFunc());
 		}
 
 
 		public static <R> void traverseNodesDepthFirst(IndexedTreeTraverseParameters<R> params) {
-			Logic.traverseIndexedPostOrder(0, 1, 0, null, params.getTree(), params.isSkipNullRoot(), params.getHasChildren(), params.getChildrenGetter(), params.getConsumerIndexed(), false, params.getStartSubtreeFunc(), params.getEndSubtreeFunc());
+			Logic.traverseIndexedPostOrder(0, 1, 0, null, params.getTree(), params.isSkipRoot(), params.isSkipNullRoot(),
+					params.getHasChildren(), params.getChildrenGetter(), params.getConsumerIndexed(),
+					false, params.getStartSubtreeFunc(), params.getEndSubtreeFunc());
 		}
 
 	}
@@ -91,7 +95,7 @@ public class TreeTraverse {
 
 
 	public static <K, V> void traversePreOrder(KeyTreeTraverseParameters<K, V> params) {
-		Logic.traversePreOrder(0, null, new AbstractMap.SimpleImmutableEntry<K, V>(null, params.getTree()), params.isSkipNullRoot(),
+		Logic.traversePreOrder(0, null, new AbstractMap.SimpleImmutableEntry<K, V>(null, params.getTree()), params.isSkipRoot(), params.isSkipNullRoot(),
 				(t) -> params.getHasChildren().test(t.getValue()),
 				(t) -> params.getChildrenGetter().apply(t.getValue()),
 				params.getConsumer(), params.isOnlyVisitLeaves(), params.getStartSubtreeFunc(), params.getEndSubtreeFunc());
@@ -99,7 +103,7 @@ public class TreeTraverse {
 
 
 	public static <K, V> void traversePostOrder(KeyTreeTraverseParameters<K, V> params) {
-		Logic.traversePostOrder(0, null, new AbstractMap.SimpleImmutableEntry<K, V>(null, params.getTree()), params.isSkipNullRoot(),
+		Logic.traversePostOrder(0, null, new AbstractMap.SimpleImmutableEntry<K, V>(null, params.getTree()), params.isSkipRoot(), params.isSkipNullRoot(),
 				(t) -> params.getHasChildren().test(t.getValue()),
 				(t) -> params.getChildrenGetter().apply(t.getValue()),
 				params.getConsumer(), params.isOnlyVisitLeaves(), params.getStartSubtreeFunc(), params.getEndSubtreeFunc());
@@ -107,13 +111,15 @@ public class TreeTraverse {
 
 
 	public static <R> void traversePostOrder(TreeTraverseParametersImpl<R> params) {
-		Logic.traversePostOrder(0, null, params.getTree(), params.isSkipNullRoot(), params.getHasChildren(), params.getChildrenGetter(), params.getConsumer(),
+		Logic.traversePostOrder(0, null, params.getTree(), params.isSkipRoot(), params.isSkipNullRoot(),
+				params.getHasChildren(), params.getChildrenGetter(), params.getConsumer(),
 				params.isOnlyVisitLeaves(), params.getStartSubtreeFunc(), params.getEndSubtreeFunc());
 	}
 
 
 	public static <R> void traversePreOrder(TreeTraverseParametersImpl<R> params) {
-		Logic.traversePreOrder(0, null, params.getTree(), params.isSkipNullRoot(), params.getHasChildren(), params.getChildrenGetter(), params.getConsumer(),
+		Logic.traversePreOrder(0, null, params.getTree(), params.isSkipRoot(), params.isSkipNullRoot(),
+				params.getHasChildren(), params.getChildrenGetter(), params.getConsumer(),
 				params.isOnlyVisitLeaves(), params.getStartSubtreeFunc(), params.getEndSubtreeFunc());
 	}
 
@@ -141,10 +147,10 @@ public class TreeTraverse {
 		// traversal functions
 
 		// ==== post-order ====
-		public static <R> void traverseIndexedPostOrder(int index, int size, int depth, R parent, R tree, boolean skipNullRoot, Predicate<R> hasChildren, Function<R, ? extends List<R>> childrenGetter,
+		public static <R> void traverseIndexedPostOrder(int index, int size, int depth, R parent, R tree, boolean skipRoot, boolean skipNullRoot, Predicate<R> hasChildren, Function<R, ? extends List<R>> childrenGetter,
 				IndexedSubtreeConsumer<R> consumer, boolean consumeOnlyLeafNodes, IntConsumer startNodeFunc, IntConsumer endNodeFunc) {
 			if(!hasChildren.test(tree)) {
-				if(tree != null || !skipNullRoot) {
+				if(!skipRoot && (tree != null || !skipNullRoot)) {
 					consumer.accept(tree, index, size, depth, parent);
 				}
 				// return early because no children
@@ -165,7 +171,7 @@ public class TreeTraverse {
 			while(count < sizeI) {
 				R subtree = children.get(count);
 				if(subtree != null) {
-					traverseIndexedPostOrder(count, sizeI, depth, tree, subtree, false, hasChildren, childrenGetter, consumer, consumeOnlyLeafNodes, startNodeFunc, endNodeFunc);
+					traverseIndexedPostOrder(count, sizeI, depth, tree, subtree, false, false, hasChildren, childrenGetter, consumer, consumeOnlyLeafNodes, startNodeFunc, endNodeFunc);
 				}
 
 				count++;
@@ -176,7 +182,7 @@ public class TreeTraverse {
 					endNodeFunc.accept(depth);
 				}
 				if(!consumeOnlyLeafNodes) {
-					if(tree != null || !skipNullRoot) {
+					if(!skipRoot && (tree != null || !skipNullRoot)) {
 						consumer.accept(tree, 0, sizeI, depth - 1, parent);
 					}
 				}
@@ -185,10 +191,10 @@ public class TreeTraverse {
 		}
 
 
-		public static <R> void traversePostOrder(int depth, R parent, R tree, boolean skipNullRoot, Predicate<R> hasChildren, Function<R, ? extends Iterable<? extends R>> childrenGetter,
+		public static <R> void traversePostOrder(int depth, R parent, R tree, boolean skipRoot, boolean skipNullRoot, Predicate<R> hasChildren, Function<R, ? extends Iterable<? extends R>> childrenGetter,
 				SubtreeConsumer<R> consumer, boolean consumeOnlyLeafNodes, IntConsumer startNodeFunc, IntConsumer endNodeFunc) {
 			if(!hasChildren.test(tree)) {
-				if(tree != null || !skipNullRoot) {
+				if(!skipRoot && (tree != null || !skipNullRoot)) {
 					consumer.accept(tree, depth, parent);
 				}
 				// return early because no children
@@ -207,7 +213,7 @@ public class TreeTraverse {
 				}
 
 				if(subtree != null) {
-					traversePostOrder(depth, tree, subtree, false, hasChildren, childrenGetter, consumer, consumeOnlyLeafNodes, startNodeFunc, endNodeFunc);
+					traversePostOrder(depth, tree, subtree, false, false, hasChildren, childrenGetter, consumer, consumeOnlyLeafNodes, startNodeFunc, endNodeFunc);
 				}
 
 				count++;
@@ -218,7 +224,7 @@ public class TreeTraverse {
 					endNodeFunc.accept(depth);
 				}
 				if(!consumeOnlyLeafNodes) {
-					if(tree != null || !skipNullRoot) {
+					if(!skipRoot && (tree != null || !skipNullRoot)) {
 						consumer.accept(tree, depth - 1, parent);
 					}
 				}
@@ -228,10 +234,10 @@ public class TreeTraverse {
 
 
 		// ==== pre-order ====
-		public static <R> void traverseIndexedPreOrder(int index, int size, int depth, R parent, R tree, boolean skipNullRoot, Predicate<R> hasChildren, Function<R, ? extends List<R>> childrenGetter,
+		public static <R> void traverseIndexedPreOrder(int index, int size, int depth, R parent, R tree, boolean skipRoot, boolean skipNullRoot, Predicate<R> hasChildren, Function<R, ? extends List<R>> childrenGetter,
 				IndexedSubtreeConsumer<R> consumer, boolean consumeOnlyLeafNodes, IntConsumer startNodeFunc, IntConsumer endNodeFunc) {
 			if(!hasChildren.test(tree)) {
-				if(tree != null || !skipNullRoot) {
+				if(!skipRoot && (tree != null || !skipNullRoot)) {
 					consumer.accept(tree, index, size, depth, parent);
 				}
 				// return early because no children
@@ -245,7 +251,7 @@ public class TreeTraverse {
 			while(count < sizeI) {
 				if(count == 0) {
 					if(!consumeOnlyLeafNodes) {
-						if(tree != null || !skipNullRoot) {
+						if(!skipRoot && (tree != null || !skipNullRoot)) {
 							consumer.accept(tree, 0, sizeI, depth, parent);
 						}
 					}
@@ -257,7 +263,7 @@ public class TreeTraverse {
 
 				R subtree = children.get(count);
 				if(subtree != null) {
-					traverseIndexedPreOrder(count, sizeI, depth, tree, subtree, false, hasChildren, childrenGetter, consumer, consumeOnlyLeafNodes, startNodeFunc, endNodeFunc);
+					traverseIndexedPreOrder(count, sizeI, depth, tree, subtree, false, false, hasChildren, childrenGetter, consumer, consumeOnlyLeafNodes, startNodeFunc, endNodeFunc);
 				}
 
 				count++;
@@ -272,10 +278,10 @@ public class TreeTraverse {
 		}
 
 
-		public static <R> void traversePreOrder(int depth, R parent, R tree, boolean skipNullRoot, Predicate<R> hasChildren, Function<R, ? extends Iterable<? extends R>> childrenGetter,
+		public static <R> void traversePreOrder(int depth, R parent, R tree, boolean skipRoot, boolean skipNullRoot, Predicate<R> hasChildren, Function<R, ? extends Iterable<? extends R>> childrenGetter,
 				SubtreeConsumer<R> consumer, boolean consumeOnlyLeafNodes, IntConsumer startNodeFunc, IntConsumer endNodeFunc) {
 			if(!hasChildren.test(tree)) {
-				if(tree != null || !skipNullRoot) {
+				if(!skipRoot && (tree != null || !skipNullRoot)) {
 					consumer.accept(tree, depth, parent);
 				}
 				// return early because no children
@@ -288,7 +294,7 @@ public class TreeTraverse {
 			for(R subtree : children) {
 				if(count == 0) {
 					if(!consumeOnlyLeafNodes) {
-						if(tree != null || !skipNullRoot) {
+						if(!skipRoot && (tree != null || !skipNullRoot)) {
 							consumer.accept(tree, depth, parent);
 						}
 					}
@@ -299,7 +305,7 @@ public class TreeTraverse {
 				}
 
 				if(subtree != null) {
-					traversePreOrder(depth, tree, subtree, false, hasChildren, childrenGetter, consumer, consumeOnlyLeafNodes, startNodeFunc, endNodeFunc);
+					traversePreOrder(depth, tree, subtree, false, false, hasChildren, childrenGetter, consumer, consumeOnlyLeafNodes, startNodeFunc, endNodeFunc);
 				}
 
 				count++;
