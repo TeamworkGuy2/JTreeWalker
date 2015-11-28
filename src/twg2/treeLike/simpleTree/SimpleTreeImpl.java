@@ -13,7 +13,7 @@ import java.util.List;
 public class SimpleTreeImpl<T> implements SimpleTree<T> {
 	private SimpleTree<T> parent;
 	private T data;
-	private List<SimpleTree<T>> children;
+	private List<SimpleTreeImpl<T>> children;
 
 
 	public SimpleTreeImpl(T data) {
@@ -81,18 +81,45 @@ public class SimpleTreeImpl<T> implements SimpleTree<T> {
 	}
 
 
+	public List<SimpleTreeImpl<T>> getChildrenRaw() {
+		return children != null ? children : Collections.emptyList();
+	}
+
+
 	public void setChildren(Collection<T> children) {
 		lazyInitChildren(null);
+		this.children.clear();
 		addChilds(children);
 	}
 
 
 	@Override
-	public SimpleTree<T> addChild(T child) {
+	public SimpleTreeImpl<T> addChild(T child) {
 		lazyInitChildren(null);
 		SimpleTreeImpl<T> newChild = newChild(child);
 		this.children.add(newChild);
 		return newChild;
+	}
+
+
+	@Override
+	public void addChildren(Iterable<? extends T> children) {
+		lazyInitChildren(null);
+		addChilds(children);
+	}
+
+
+	/** Moves {@code child} tree and its sub-trees to this tree, updating child's parent references.
+	 * NOTE: the child node is reused, no new objects are created.
+	 * @param child the child {@link SimpleTreeImpl} to move to this tree
+	 * @return the new child node added to this tree
+	 */
+	@SuppressWarnings("unchecked")
+	public SimpleTreeImpl<T> addChildTree(SimpleTreeImpl<? extends T> child) {
+		lazyInitChildren(null);
+		((SimpleTreeImpl<T>)child).setParent(this);
+		this.children.add((SimpleTreeImpl<T>)child);
+		return (SimpleTreeImpl<T>)child;
 	}
 
 
@@ -104,6 +131,16 @@ public class SimpleTreeImpl<T> implements SimpleTree<T> {
 	@Override
 	public boolean removeChild(SimpleTree<T> subTree) {
 		return this.children != null ? this.children.remove(subTree) : false;
+	}
+
+
+	@Override
+	public boolean removeChildren(Iterable<? extends SimpleTree<T>> children) {
+		boolean res = true;
+		for(SimpleTree<T> child : children) {
+			res &= removeChild(child);
+		}
+		return res;
 	}
 
 
@@ -122,7 +159,7 @@ public class SimpleTreeImpl<T> implements SimpleTree<T> {
 	}
 
 
-	final void addChilds(Collection<T> childs) {
+	final void addChilds(Iterable<? extends T> childs) {
 		if(childs != null) {
 			for(T child : childs) {
 				children.add(newChild(child));
@@ -155,6 +192,17 @@ public class SimpleTreeImpl<T> implements SimpleTree<T> {
 			return false;
 		}
 		return true;
+	}
+
+
+	@Override
+	public String toString() {
+		if(children == null) {
+			return data != null ? data.toString() : "null";
+		}
+		else {
+			return super.toString();
+		}
 	}
 
 }

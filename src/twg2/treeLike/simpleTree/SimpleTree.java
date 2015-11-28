@@ -28,12 +28,21 @@ public interface SimpleTree<T> extends IndexedTree<T, SimpleTree<T>> {
 
 
 	/**
-	 * @param childData the data to store in the child tree
+	 * @param childData the data to store in the tree
 	 * @return the child tree created to hold the new data reference
 	 */
 	public SimpleTree<T> addChild(T childData);
 
 
+	/**
+	 * @param childrenData a collection of child data to store in the tree
+	 */
+	public void addChildren(Iterable<? extends T> childrenData);
+
+
 	public boolean removeChild(SimpleTree<T> subTree);
+
+
+	public boolean removeChildren(Iterable<? extends SimpleTree<T>> subTree);
 
 }
