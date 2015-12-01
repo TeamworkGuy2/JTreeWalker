@@ -31,7 +31,7 @@ public class TreeTraversePreOrder {
 			if(count == 0) {
 				if(!consumeOnlyLeafNodes) {
 					if(!skipRoot && (tree != null || !skipNullRoot)) {
-						consumer.accept(tree, 0, sizeI, depth, parent);
+						consumer.accept(tree, index, size, depth, parent);
 					}
 				}
 				depth++;

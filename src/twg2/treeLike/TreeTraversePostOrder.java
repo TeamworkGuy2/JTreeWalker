@@ -49,7 +49,7 @@ public class TreeTraversePostOrder {
 			}
 			if(!consumeOnlyLeafNodes) {
 				if(!skipRoot && (tree != null || !skipNullRoot)) {
-					consumer.accept(tree, 0, sizeI, depth - 1, parent);
+					consumer.accept(tree, index, size, depth - 1, parent);
 				}
 			}
 			depth--;
