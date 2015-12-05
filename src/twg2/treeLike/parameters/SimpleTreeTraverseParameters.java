@@ -31,7 +31,7 @@ public class SimpleTreeTraverseParameters<T> extends IndexedTreeTraverseParamete
 	@Override
 	public SimpleTreeTraverseParameters<T> setHasChildren(Predicate<SimpleTree<T>> hasChildren) { super.setHasChildren(hasChildren); return this; }
 	@Override
-	public SimpleTreeTraverseParameters<T> setChildrenGetter(Function<SimpleTree<T>, List<SimpleTree<T>>> childrenGetter) { super.setChildrenGetter(childrenGetter); return this; }
+	public SimpleTreeTraverseParameters<T> setChildrenGetter(Function<SimpleTree<T>, List<? extends SimpleTree<T>>> childrenGetter) { super.setChildrenGetter(childrenGetter); return this; }
 	@Override
 	public SimpleTreeTraverseParameters<T> setStartSubtreeFunc(IntConsumer startSubtreeFunc) { super.setStartSubtreeFunc(startSubtreeFunc); return this; }
 	@Override

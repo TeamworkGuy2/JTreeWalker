@@ -11,8 +11,8 @@ import java.util.function.Predicate;
  */
 public class TreeTraversePreOrder {
 
-	public static <R> void traverseIndexedPreOrder(int index, int size, int depth, R parent, R tree, boolean skipRoot, boolean skipNullRoot, Predicate<R> hasChildren, Function<R, ? extends List<R>> childrenGetter,
-			IndexedSubtreeConsumer<R> consumer, boolean consumeOnlyLeafNodes, IntConsumer startNodeFunc, IntConsumer endNodeFunc) {
+	public static <R> void traverseIndexedPreOrder(int index, int size, int depth, R parent, R tree, boolean skipRoot, boolean skipNullRoot, Predicate<R> hasChildren,
+			Function<R, ? extends List<? extends R>> childrenGetter, IndexedSubtreeConsumer<R> consumer, boolean consumeOnlyLeafNodes, IntConsumer startNodeFunc, IntConsumer endNodeFunc) {
 		if(!hasChildren.test(tree)) {
 			if(!skipRoot && (tree != null || !skipNullRoot)) {
 				consumer.accept(tree, index, size, depth, parent);
@@ -21,7 +21,7 @@ public class TreeTraversePreOrder {
 			return;
 		}
 
-		List<R> children = childrenGetter.apply(tree);
+		List<? extends R> children = childrenGetter.apply(tree);
 		int count = 0;
 
 		int sizeI = children.size();

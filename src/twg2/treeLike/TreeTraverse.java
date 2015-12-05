@@ -189,7 +189,7 @@ public class TreeTraverse {
 		}
 
 
-		public static <R> void treeToDepthLists(int index, int size, int depth, R parent, R tree, Predicate<R> hasChildren, Function<R, ? extends List<R>> childrenGetter,
+		public static <R> void treeToDepthLists(int index, int size, int depth, R parent, R tree, Predicate<R> hasChildren, Function<R, ? extends List<? extends R>> childrenGetter,
 				boolean consumeOnlyLeafNodes, List<List<R>> dst) {
 			if(!hasChildren.test(tree)) {
 				while(dst.size() <= (!consumeOnlyLeafNodes ? depth : 0)) {
@@ -205,7 +205,7 @@ public class TreeTraverse {
 				return;
 			}
 
-			List<R> children = childrenGetter.apply(tree);
+			List<? extends R> children = childrenGetter.apply(tree);
 			int count = 0;
 
 			int sizeI = children.size();

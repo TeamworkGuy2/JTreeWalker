@@ -33,15 +33,15 @@ public class TreeTransform {
 
 	public static <R, S> SimpleTree<S> transformSimpleTree(SimpleTree<R> tree, SubtreeTransformer<R, S> transformer,
 			SubtreeConsumer<S> transformedConsumer) {
-		SimpleTreeImpl<S> treeTransformed = new SimpleTreeImpl<>(null); 
+		SimpleTreeImpl<S> treeTransformed = new SimpleTreeImpl<>(null);
 		transformSimpleTree0(0, null, tree, null, treeTransformed, transformer, transformedConsumer, false, null, null);
 		return treeTransformed;
 	}
 
 
-	public static <R, S> SimpleTree<S> transformSimpleTree(SimpleTree<R> tree, SubtreeTransformer<R, S> transformer,
+	public static <R, S> SimpleTree<S> transformSimpleTree(SimpleTree<R> tree, S rootDataTransformed, SubtreeTransformer<R, S> transformer,
 			SubtreeConsumer<S> transformedConsumer, IntConsumer startNodeFunc, IntConsumer endNodeFunc) {
-		SimpleTreeImpl<S> treeTransformed = new SimpleTreeImpl<>(null); 
+		SimpleTreeImpl<S> treeTransformed = new SimpleTreeImpl<>(rootDataTransformed);
 		transformSimpleTree0(0, null, tree, null, treeTransformed, transformer, transformedConsumer, false, startNodeFunc, endNodeFunc);
 		return treeTransformed;
 	}
