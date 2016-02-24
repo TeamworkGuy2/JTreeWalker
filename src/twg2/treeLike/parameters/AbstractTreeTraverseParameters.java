@@ -4,10 +4,10 @@ import java.util.function.Function;
 import java.util.function.IntConsumer;
 import java.util.function.Predicate;
 
-import twg2.treeLike.TreeTraversalOrder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import twg2.treeLike.TreeTraversalOrder;
 
 /**
  * @author TeamworkGuy2

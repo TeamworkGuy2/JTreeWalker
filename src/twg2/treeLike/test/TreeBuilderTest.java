@@ -8,8 +8,8 @@ import java.util.Set;
 
 import org.junit.Test;
 
+import twg2.collections.builder.MapBuilder;
 import twg2.collections.tuple.Entries;
-import twg2.collections.util.MapBuilder;
 import twg2.treeLike.TreeBuilder;
 import twg2.treeLike.simpleTree.SimpleTree;
 
