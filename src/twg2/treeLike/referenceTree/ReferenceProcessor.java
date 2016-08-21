@@ -11,8 +11,8 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 import twg2.collections.builder.MapUtil;
-import twg2.collections.tuple.Entries;
-import twg2.collections.tuple.Tuples;
+import twg2.tuple.Entries;
+import twg2.tuple.Tuples;
 
 /**
  * @author TeamworkGuy2

@@ -5,10 +5,10 @@ import java.util.List;
 import java.util.Map;
 
 import twg2.collections.builder.MapBuilder;
-import twg2.collections.tuple.Tuples;
 import twg2.treeLike.simpleTree.SimpleKeyTree;
 import twg2.treeLike.simpleTree.SimpleTree;
 import twg2.treeLike.simpleTree.SimpleTreeImpl;
+import twg2.tuple.Tuples;
 
 /**
  * @author TeamworkGuy2

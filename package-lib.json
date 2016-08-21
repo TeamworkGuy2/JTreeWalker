@@ -1,10 +1,10 @@
 {
-	"version" : "0.1.0",
+	"version" : "0.1.1",
 	"name" : "jtree-walker",
 	"description" : "Tree traversal and manipulation in Java",
 	"homepage" : "https://github.com/TeamworkGuy2/JTreeWalker",
 	"license" : "MIT",
-	"main" : "./jar/jtree_walker.jar",
+	"main" : "./bin/jtree_walker.jar",
 	"dependencies" : {
 		"jcollection-util": "*"
 	}
