@@ -139,7 +139,6 @@ public class TreeTraverse {
 	/** Tree traversal functions that take many flags and parameters for complete control of tree traversal
 	 * @see TreeTransform
 	 * @see SimpleTreeUtil
-	 * @see TreeTraverseInOrder
 	 * @see TreeTraversePostOrder
 	 * @see TreeTraversePreOrder
 	 */

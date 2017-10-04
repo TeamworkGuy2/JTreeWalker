@@ -42,7 +42,6 @@ public class IndexedTreeTraverseParameters<T> extends AbstractTreeTraverseParame
 	}
 
 
-	@SuppressWarnings("unchecked")
 	public IndexedTreeTraverseParameters(T tree, boolean onlyVisitLeaves, boolean skipNullRoot, TreeTraversalOrder traversalOrder, Predicate<T> hasChildren, Function<T, List<? extends T>> childrenGetter,
 			IndexedSubtreeConsumer<T> consumer, IntConsumer startSubtreeFunc, IntConsumer endSubtreeFunc) {
 		super(tree, onlyVisitLeaves, skipNullRoot, traversalOrder, hasChildren, childrenGetter, startSubtreeFunc, endSubtreeFunc);
