@@ -1,19 +1,20 @@
 package twg2.treeLike.simpleTree;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+
+import twg2.collections.dataStructures.BaseList;
+import twg2.collections.interfaces.ListReadOnly;
 
 /**
  * @author TeamworkGuy2
  * @since 2015-5-27
  */
 public class SimpleTreeImpl<T> implements SimpleTree<T> {
+	private static ListReadOnly<SimpleTree<?>> emptyList = new BaseList<>();
 	private SimpleTree<T> parent;
 	private T data;
-	private List<SimpleTreeImpl<T>> children;
+	private BaseList<SimpleTreeImpl<T>> children;
 
 
 	public SimpleTreeImpl(T data) {
@@ -76,13 +77,13 @@ public class SimpleTreeImpl<T> implements SimpleTree<T> {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	public List<SimpleTree<T>> getChildren() {
-		return children != null ? (List<SimpleTree<T>>)((List)children) : Collections.emptyList();
+	public ListReadOnly<SimpleTree<T>> getChildren() {
+		return (ListReadOnly<SimpleTree<T>>)((ListReadOnly)(children != null ? children : emptyList()));
 	}
 
 
-	public List<SimpleTreeImpl<T>> getChildrenRaw() {
-		return children != null ? children : Collections.emptyList();
+	public BaseList<SimpleTreeImpl<T>> getChildrenRaw() {
+		return children != null ? children : emptyList();
 	}
 
 
@@ -134,6 +135,11 @@ public class SimpleTreeImpl<T> implements SimpleTree<T> {
 	}
 
 
+	public boolean removeChildRef(SimpleTree<T> subTree) {
+		return this.children != null ? this.children.removeRef(subTree) : false;
+	}
+
+
 	@Override
 	public boolean removeChildren(Iterable<? extends SimpleTree<T>> children) {
 		boolean res = true;
@@ -151,7 +157,7 @@ public class SimpleTreeImpl<T> implements SimpleTree<T> {
 
 	private final void lazyInitChildren(Collection<T> childs) {
 		if(children == null) {
-			children = new ArrayList<>();
+			children = new BaseList<>();
 			if(childs != null) {
 				addChilds(childs);
 			}
@@ -203,6 +209,12 @@ public class SimpleTreeImpl<T> implements SimpleTree<T> {
 		else {
 			return super.toString();
 		}
+	}
+
+
+	@SuppressWarnings("unchecked")
+	private static <_T> BaseList<_T> emptyList() {
+		return (BaseList<_T>)emptyList;
 	}
 
 }

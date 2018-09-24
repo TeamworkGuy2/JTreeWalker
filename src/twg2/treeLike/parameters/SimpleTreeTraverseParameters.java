@@ -1,11 +1,11 @@
 package twg2.treeLike.parameters;
 
-import java.util.List;
 import java.util.function.Function;
 import java.util.function.IntConsumer;
 import java.util.function.Predicate;
 
 import lombok.val;
+import twg2.collections.interfaces.ListReadOnly;
 import twg2.treeLike.IndexedSubtreeConsumer;
 import twg2.treeLike.TreeTraversalOrder;
 import twg2.treeLike.simpleTree.SimpleTree;
@@ -31,7 +31,7 @@ public class SimpleTreeTraverseParameters<T> extends IndexedTreeTraverseParamete
 	@Override
 	public SimpleTreeTraverseParameters<T> setHasChildren(Predicate<SimpleTree<T>> hasChildren) { super.setHasChildren(hasChildren); return this; }
 	@Override
-	public SimpleTreeTraverseParameters<T> setChildrenGetter(Function<SimpleTree<T>, List<? extends SimpleTree<T>>> childrenGetter) { super.setChildrenGetter(childrenGetter); return this; }
+	public SimpleTreeTraverseParameters<T> setChildrenGetter(Function<SimpleTree<T>, ListReadOnly<? extends SimpleTree<T>>> childrenGetter) { super.setChildrenGetter(childrenGetter); return this; }
 	@Override
 	public SimpleTreeTraverseParameters<T> setStartSubtreeFunc(IntConsumer startSubtreeFunc) { super.setStartSubtreeFunc(startSubtreeFunc); return this; }
 	@Override

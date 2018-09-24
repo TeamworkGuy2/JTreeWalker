@@ -10,13 +10,13 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import twg2.collections.builder.ListUtil;
+import twg2.junitassist.checks.CheckCollections;
 import twg2.treeLike.TreeTraversalOrder;
 import twg2.treeLike.TreeTraverse;
 import twg2.treeLike.parameters.TreePathTraverseParameters;
 import twg2.treeLike.simpleTree.SimpleTree;
 import twg2.treeLike.simpleTree.SimpleTreeImpl;
 import twg2.treeLike.simpleTree.SimpleTreeUtil;
-import checks.CheckCollections;
 
 /**
  * @author TeamworkGuy2
@@ -112,7 +112,7 @@ public class SimpleTreeTest {
 			removedNodes.get(depth).add(branch.getData());
 		});
 
-		CheckCollections.assertLooseEqualsDepth2(allNodes, removedNodes);
+		CheckCollections.assertLooseEqualsNested(allNodes, removedNodes);
 		Assert.assertTrue(tree.getChildren().size() == 0);
 	}
 

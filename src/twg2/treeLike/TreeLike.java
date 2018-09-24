@@ -1,6 +1,6 @@
 package twg2.treeLike;
 
-import java.util.Collection;
+import twg2.collections.interfaces.ListReadOnly;
 
 /**
  * @author TeamworkGuy2
@@ -14,6 +14,6 @@ public interface TreeLike<D, P extends TreeLike<D, P>> {
 
 	public boolean hasChildren();
 
-	public Collection<P> getChildren();
+	public ListReadOnly<P> getChildren();
 
 }

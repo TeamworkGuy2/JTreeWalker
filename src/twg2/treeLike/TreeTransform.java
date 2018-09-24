@@ -1,12 +1,10 @@
 package twg2.treeLike;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.RandomAccess;
 import java.util.function.Function;
 import java.util.function.IntConsumer;
 import java.util.function.Predicate;
 
+import twg2.collections.interfaces.ListReadOnly;
 import twg2.treeLike.simpleTree.SimpleTree;
 import twg2.treeLike.simpleTree.SimpleTreeImpl;
 
@@ -20,13 +18,13 @@ public class TreeTransform {
 
 
 	public static <R, S> void traverseTransformTree(R tree, S treeTransformed, SubtreeTransformer<R, S> transformer,
-			Predicate<R> hasChildren, Function<R, Collection<R>> childrenGetter, SubtreeConsumer<S> transformedConsumer) {
+			Predicate<R> hasChildren, Function<R, ListReadOnly<R>> childrenGetter, SubtreeConsumer<S> transformedConsumer) {
 		traverseTransformTree(tree, treeTransformed, transformer, hasChildren, childrenGetter, transformedConsumer, null, null);
 	}
 
 
 	public static <R, S> void traverseTransformTree(R tree, S treeTransformed, SubtreeTransformer<R, S> transformer,
-			Predicate<R> hasChildren, Function<R, Collection<R>> childrenGetter, SubtreeConsumer<S> transformedConsumer, IntConsumer startNodeFunc, IntConsumer endNodeFunc) {
+			Predicate<R> hasChildren, Function<R, ListReadOnly<R>> childrenGetter, SubtreeConsumer<S> transformedConsumer, IntConsumer startNodeFunc, IntConsumer endNodeFunc) {
 		traverseTransformTree(0, null, tree, null, treeTransformed, transformer, hasChildren, childrenGetter, transformedConsumer, false, startNodeFunc, endNodeFunc);
 	}
 
@@ -48,7 +46,7 @@ public class TreeTransform {
 
 
 	public static <R, S> SimpleTree<S> transformTree(R tree, SubtreeTransformer<R, S> transformer, Predicate<R> hasChildren,
-			Function<R, Collection<R>> childrenGetter, SubtreeConsumer<S> transformedConsumer, IntConsumer startNodeFunc, IntConsumer endNodeFunc) {
+			Function<R, ListReadOnly<R>> childrenGetter, SubtreeConsumer<S> transformedConsumer, IntConsumer startNodeFunc, IntConsumer endNodeFunc) {
 		SimpleTreeImpl<S> treeTransformed = new SimpleTreeImpl<>(null); 
 		transformTree0(0, null, tree, null, treeTransformed, transformer, hasChildren, childrenGetter, transformedConsumer, false, startNodeFunc, endNodeFunc);
 		return treeTransformed;
@@ -56,14 +54,14 @@ public class TreeTransform {
 
 
 	public static <R, S> void transformTree0(int depth, R parent, R tree, SimpleTree<S> parentTransformed, SimpleTree<S> treeTransformed, SubtreeTransformer<R, S> transformer,
-			Predicate<R> hasChildren, Function<R, Collection<R>> childrenGetter, SubtreeConsumer<S> consumer, boolean consumeOnlyLeafNodes, IntConsumer startNodeFunc, IntConsumer endNodeFunc) {
+			Predicate<R> hasChildren, Function<R, ListReadOnly<R>> childrenGetter, SubtreeConsumer<S> consumer, boolean consumeOnlyLeafNodes, IntConsumer startNodeFunc, IntConsumer endNodeFunc) {
 		if(!hasChildren.test(tree)) {
 			consumer.accept(treeTransformed.getData(), depth, parentTransformed.getData());
 			// return early because no children
 			return;
 		}
 
-		Collection<R> children = childrenGetter.apply(tree);
+		ListReadOnly<R> children = childrenGetter.apply(tree);
 		int count = 0;
 
 		for(R subtree : children) {
@@ -104,7 +102,7 @@ public class TreeTransform {
 			return;
 		}
 
-		List<SimpleTree<R>> children = tree.getChildren();
+		ListReadOnly<SimpleTree<R>> children = tree.getChildren();
 		int count = children.size();
 
 		if(count > 0) {
@@ -138,61 +136,37 @@ public class TreeTransform {
 
 
 	public static <R, S> void traverseTransformTree(int depth, R parent, R tree, S parentTransformed, S treeTransformed, SubtreeTransformer<R, S> transformer,
-			Predicate<R> hasChildren, Function<R, Collection<R>> childrenGetter, SubtreeConsumer<S> consumer, boolean consumeOnlyLeafNodes, IntConsumer startNodeFunc, IntConsumer endNodeFunc) {
+			Predicate<R> hasChildren, Function<R, ListReadOnly<R>> childrenGetter, SubtreeConsumer<S> consumer, boolean consumeOnlyLeafNodes, IntConsumer startNodeFunc, IntConsumer endNodeFunc) {
 		if(!hasChildren.test(tree)) {
 			consumer.accept(treeTransformed, depth, parentTransformed);
 			// return early because no children
 			return;
 		}
 
-		Collection<R> children = childrenGetter.apply(tree);
+		ListReadOnly<R> children = childrenGetter.apply(tree);
 		int count = 0;
 
-		if(children instanceof RandomAccess && children instanceof List) {
-			List<R> childrenList = (List<R>)children;
-			int sizeI = childrenList.size();
-			while(count < sizeI) {
-				R subtree = childrenList.get(count);
+		int sizeI = children.size();
+		while(count < sizeI) {
+			R subtree = children.get(count);
 
-				if(count == 0) {
-					if(!consumeOnlyLeafNodes) {
-						consumer.accept(treeTransformed, depth, parentTransformed);
-					}
-					depth++;
-					if(startNodeFunc != null) {
-						startNodeFunc.accept(depth);
-					}
+			if(count == 0) {
+				if(!consumeOnlyLeafNodes) {
+					consumer.accept(treeTransformed, depth, parentTransformed);
 				}
-
-				S subtreeTransformed = transformer.apply(subtree, treeTransformed, tree);
-
-				if(subtree != null) {
-					traverseTransformTree(depth, tree, subtree, treeTransformed, subtreeTransformed, transformer, hasChildren, childrenGetter, consumer, consumeOnlyLeafNodes, startNodeFunc, endNodeFunc);
+				depth++;
+				if(startNodeFunc != null) {
+					startNodeFunc.accept(depth);
 				}
-
-				count++;
 			}
-		}
-		else {
-			for(R subtree : children) {
-				if(count == 0) {
-					if(!consumeOnlyLeafNodes) {
-						consumer.accept(treeTransformed, depth, parentTransformed);
-					}
-					depth++;
-					if(startNodeFunc != null) {
-						startNodeFunc.accept(depth);
-					}
-				}
 
-				S subtreeTransformed = transformer.apply(subtree, treeTransformed, tree);
+			S subtreeTransformed = transformer.apply(subtree, treeTransformed, tree);
 
-				if(subtree != null) {
-					traverseTransformTree(depth, tree, subtree, treeTransformed, subtreeTransformed, transformer, hasChildren, childrenGetter, consumer, consumeOnlyLeafNodes, startNodeFunc, endNodeFunc);
-				}
-
-				count++;
+			if(subtree != null) {
+				traverseTransformTree(depth, tree, subtree, treeTransformed, subtreeTransformed, transformer, hasChildren, childrenGetter, consumer, consumeOnlyLeafNodes, startNodeFunc, endNodeFunc);
 			}
+
+			count++;
 		}
 
 		if(count > 0) {

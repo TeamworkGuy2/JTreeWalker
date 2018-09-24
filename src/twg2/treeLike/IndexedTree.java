@@ -1,6 +1,6 @@
 package twg2.treeLike;
 
-import java.util.List;
+import twg2.collections.interfaces.ListReadOnly;
 
 /**
  * @author TeamworkGuy2
@@ -11,7 +11,7 @@ import java.util.List;
 public interface IndexedTree<D, P extends IndexedTree<D, P>> extends TreeLike<D, P> {
 
 	@Override
-	public List<P> getChildren();
+	public ListReadOnly<P> getChildren();
 
 	public int size();
 

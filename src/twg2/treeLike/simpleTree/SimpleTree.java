@@ -1,7 +1,6 @@
 package twg2.treeLike.simpleTree;
 
-import java.util.List;
-
+import twg2.collections.interfaces.ListReadOnly;
 import twg2.treeLike.IndexedTree;
 
 /**
@@ -24,7 +23,7 @@ public interface SimpleTree<T> extends IndexedTree<T, SimpleTree<T>> {
 
 
 	@Override
-	public List<SimpleTree<T>> getChildren();
+	public ListReadOnly<SimpleTree<T>> getChildren();
 
 
 	/**

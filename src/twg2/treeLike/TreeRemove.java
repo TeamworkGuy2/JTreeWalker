@@ -1,8 +1,9 @@
 package twg2.treeLike;
 
-import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
+
+import twg2.collections.interfaces.ListReadOnly;
 
 /**
  * @author TeamworkGuy2
@@ -13,7 +14,7 @@ public class TreeRemove {
 	private TreeRemove() { throw new AssertionError("cannot instantiate static class TreeRemove"); }
 
 
-	public static <R> void removeAllNodes(int depth, R parent, R tree, Predicate<R> hasChildren, Function<R, List<R>> childrenGetter,
+	public static <R> void removeAllNodes(int depth, R parent, R tree, Predicate<R> hasChildren, Function<R, ListReadOnly<R>> childrenGetter,
 			SubtreeConsumer<R> consumer, Remover<R, R> remover, boolean consumeOnlyLeafNodes) {
 		if(!hasChildren.test(tree)) {
 			consumer.accept(tree, depth, parent);
@@ -24,7 +25,7 @@ public class TreeRemove {
 			return;
 		}
 
-		List<R> children = childrenGetter.apply(tree);
+		ListReadOnly<R> children = childrenGetter.apply(tree);
 
 		int sizeI = children.size();
 		if(sizeI > 0) {

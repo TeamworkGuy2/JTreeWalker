@@ -4,7 +4,18 @@ This project does its best to adhere to [Semantic Versioning](http://semver.org/
 
 
 --------
-### [0.1.2](N/A) - 2016-10-03
+### [0.2.0](N/A) - 2018-09-23
+#### Changed
+* Upgrade to Java 10
+* Upgrade to JUnit 5
+* Update dependencies:
+  * jcollection-util@0.7.5
+* `TreeLike.getChildren()` returns `ListReadOnly` instead of `List`
+  * `*Parameters` classes updated to use `ListReadOnly`
+
+
+--------
+### [0.1.2](https://github.com/TeamworkGuy2/JTreeWalker/commit/0b346a946ec71c3083882dca4f2c9225fac64615) - 2016-10-03
 #### Changed
 * Fixed some compiler warnings
 

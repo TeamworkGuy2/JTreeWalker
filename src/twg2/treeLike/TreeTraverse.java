@@ -2,12 +2,12 @@ package twg2.treeLike;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.IntConsumer;
 import java.util.function.Predicate;
 
+import twg2.collections.interfaces.ListReadOnly;
 import twg2.treeLike.parameters.IndexedTreeTraverseParameters;
 import twg2.treeLike.parameters.KeyTreeTraverseParameters;
 import twg2.treeLike.parameters.TreePathTraverseParameters;
@@ -145,7 +145,7 @@ public class TreeTraverse {
 	public static class Logic {
 
 		// ==== traverse with path stack ====
-		public static <R> void traverseTreeWithPath(int index, int size, int depth, R parent, R tree, Predicate<R> hasChildren, Function<R, ? extends Collection<R>> childrenGetter,
+		public static <R> void traverseTreeWithPath(int index, int size, int depth, R parent, R tree, Predicate<R> hasChildren, Function<R, ? extends ListReadOnly<R>> childrenGetter,
 				boolean consumeOnlyLeafNodes, List<R> parentStack, TreePathConsumer<R> consumer, IntConsumer startNodeFunc, IntConsumer endNodeFunc) {
 			if(!hasChildren.test(tree)) {
 				consumer.accept(tree, depth, parentStack);
@@ -153,7 +153,7 @@ public class TreeTraverse {
 				return;
 			}
 
-			Collection<R> children = childrenGetter.apply(tree);
+			ListReadOnly<R> children = childrenGetter.apply(tree);
 			int count = 0;
 
 			parentStack.add(tree);
@@ -188,7 +188,7 @@ public class TreeTraverse {
 		}
 
 
-		public static <R> void treeToDepthLists(int index, int size, int depth, R parent, R tree, Predicate<R> hasChildren, Function<R, ? extends List<? extends R>> childrenGetter,
+		public static <R> void treeToDepthLists(int index, int size, int depth, R parent, R tree, Predicate<R> hasChildren, Function<R, ? extends ListReadOnly<? extends R>> childrenGetter,
 				boolean consumeOnlyLeafNodes, List<List<R>> dst) {
 			if(!hasChildren.test(tree)) {
 				while(dst.size() <= (!consumeOnlyLeafNodes ? depth : 0)) {
@@ -204,7 +204,7 @@ public class TreeTraverse {
 				return;
 			}
 
-			List<? extends R> children = childrenGetter.apply(tree);
+			ListReadOnly<? extends R> children = childrenGetter.apply(tree);
 			int count = 0;
 
 			int sizeI = children.size();

@@ -1,9 +1,10 @@
 package twg2.treeLike;
 
-import java.util.List;
 import java.util.function.Function;
 import java.util.function.IntConsumer;
 import java.util.function.Predicate;
+
+import twg2.collections.interfaces.ListReadOnly;
 
 /** Static tree post-order traversal functions
  * @author TeamworkGuy2
@@ -12,7 +13,7 @@ import java.util.function.Predicate;
 public class TreeTraversePostOrder {
 
 	public static <R> void traverseIndexedPostOrder(int index, int size, int depth, R parent, R tree, boolean skipRoot, boolean skipNullRoot, Predicate<R> hasChildren,
-			Function<R, ? extends List<? extends R>> childrenGetter, IndexedSubtreeConsumer<R> consumer, boolean consumeOnlyLeafNodes, IntConsumer startNodeFunc, IntConsumer endNodeFunc) {
+			Function<R, ? extends ListReadOnly<? extends R>> childrenGetter, IndexedSubtreeConsumer<R> consumer, boolean consumeOnlyLeafNodes, IntConsumer startNodeFunc, IntConsumer endNodeFunc) {
 		if(!hasChildren.test(tree)) {
 			if(!skipRoot && (tree != null || !skipNullRoot)) {
 				consumer.accept(tree, index, size, depth, parent);
@@ -21,7 +22,7 @@ public class TreeTraversePostOrder {
 			return;
 		}
 
-		List<? extends R> children = childrenGetter.apply(tree);
+		ListReadOnly<? extends R> children = childrenGetter.apply(tree);
 		int count = 0;
 		int sizeI = children.size();
 
