@@ -8,7 +8,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Lombok"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/TestChecks"/>
 	<classpathentry kind="lib" path="C:/Users/TeamworkGuy2/Documents/Java/Libraries/jcollection-builders/bin/jcollection_builders.jar" sourcepath="/JCollectionBuilders"/>
 	<classpathentry kind="lib" path="C:/Users/TeamworkGuy2/Documents/Java/Libraries/jcollection-interfaces/bin/jcollection_interfaces.jar" sourcepath="/JCollectionInterfaces"/>

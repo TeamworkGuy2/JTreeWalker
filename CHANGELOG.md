@@ -4,7 +4,23 @@ This project does its best to adhere to [Semantic Versioning](http://semver.org/
 
 
 --------
-### [0.2.0](N/A) - 2018-09-23
+### [0.3.0](N/A) - 2019-03-22
+#### Changed
+* Removed lombok dependency
+* Added missing interface and method documentation
+* Renamed `IndexedSubtreeConsumer<T>` -> `IndexedTreeConsumer<T>`
+* Renamed `SubtreeConsumer<T>` -> `TreeConsumer<T>`
+* Renamed `SubtreeTransformer` -> `TreeTransformer`
+* `KeyTreeLike` now has 2 generic parameters and `getParent()`, `getChild()`, and `getChildren()` return type `KeyTreeLike<K, D>` instead of an intermediate `P` generic type. If needed, customize the return types by creating a sub-interface with more specific return types.
+* Marked `SimpleTreeUtil` as `final`
+
+#### Removed
+* Removed `IndexedTree` (moved `size()` into `TreeLike`)
+* Removed `KeyTree` (moved `size()` into `KeyTreeLike`)
+
+
+--------
+### [0.2.0](https://github.com/TeamworkGuy2/JTreeWalker/commit/9e79649698288b8f98762159d751eec25bc15371) - 2018-09-23
 #### Changed
 * Upgrade to Java 10
 * Upgrade to JUnit 5

@@ -4,8 +4,7 @@ import java.util.function.Function;
 import java.util.function.IntConsumer;
 import java.util.function.Predicate;
 
-import lombok.val;
-import twg2.treeLike.SubtreeConsumer;
+import twg2.treeLike.TreeConsumer;
 import twg2.treeLike.TreeTraversalOrder;
 
 /**
@@ -13,9 +12,9 @@ import twg2.treeLike.TreeTraversalOrder;
  * @since 2015-8-31
  * @see AbstractTreeTraverseParameters
  */
-public class TreeTraverseParametersImpl<T> extends AbstractTreeTraverseParameters<T, T, Iterable<T>, SubtreeConsumer<T>> {
+public class TreeTraverseParametersImpl<T> extends AbstractTreeTraverseParameters<T, T, Iterable<T>, TreeConsumer<T>> {
 	// package-private
-	SubtreeConsumer<T> consumer;
+	TreeConsumer<T> consumer;
 
 	@Override
 	public TreeTraverseParametersImpl<T> setTree(T tree) { super.setTree(tree); return this; }
@@ -37,39 +36,39 @@ public class TreeTraverseParametersImpl<T> extends AbstractTreeTraverseParameter
 
 	@SuppressWarnings("unchecked")
 	public TreeTraverseParametersImpl(T tree, boolean onlyVisitLeaves, TreeTraversalOrder traversalOrder, Predicate<T> hasChildren, Function<T, ? extends Iterable<T>> childrenGetter,
-			SubtreeConsumer<T> consumer, IntConsumer startSubtreeFunc, IntConsumer endSubtreeFunc) {
+			TreeConsumer<T> consumer, IntConsumer startSubtreeFunc, IntConsumer endSubtreeFunc) {
 		super(tree, onlyVisitLeaves, false, traversalOrder, hasChildren, (Function<T, Iterable<T>>) childrenGetter, startSubtreeFunc, endSubtreeFunc);
 		this.consumer = consumer;
 	}
 
 
 	@Override
-	public SubtreeConsumer<T> getConsumer() {
+	public TreeConsumer<T> getConsumer() {
 		return this.consumer;
 	}
 
 
 	@Override
-	public TreeTraverseParametersImpl<T> setConsumer(SubtreeConsumer<T> consumer) {
+	public TreeTraverseParametersImpl<T> setConsumer(TreeConsumer<T> consumer) {
 		this.consumer = consumer;
 		return this;
 	}
 
 
 	public static <F> TreeTraverseParametersImpl<F> of(F tree, boolean onlyVisitLeaves, TreeTraversalOrder traversalOrder, Predicate<F> hasChildren, Function<F, ? extends Iterable<F>> childrenGetter) {
-		val params = new TreeTraverseParametersImpl<F>(tree, onlyVisitLeaves, traversalOrder, hasChildren, childrenGetter, null, null, null);
+		var params = new TreeTraverseParametersImpl<F>(tree, onlyVisitLeaves, traversalOrder, hasChildren, childrenGetter, null, null, null);
 		return params;
 	}
 
 
 	public static <F> TreeTraverseParametersImpl<F> leafNodes(F tree, TreeTraversalOrder traversalOrder, Predicate<F> hasChildren, Function<F, ? extends Iterable<F>> childrenGetter) {
-		val params = new TreeTraverseParametersImpl<F>(tree, true, traversalOrder, hasChildren, childrenGetter, null, null, null);
+		var params = new TreeTraverseParametersImpl<F>(tree, true, traversalOrder, hasChildren, childrenGetter, null, null, null);
 		return params;
 	}
 
 
 	public static <F> TreeTraverseParametersImpl<F> allNodes(F tree, TreeTraversalOrder traversalOrder, Predicate<F> hasChildren, Function<F, ? extends Iterable<F>> childrenGetter) {
-		val params = new TreeTraverseParametersImpl<F>(tree, false, traversalOrder, hasChildren, childrenGetter, null, null, null);
+		var params = new TreeTraverseParametersImpl<F>(tree, false, traversalOrder, hasChildren, childrenGetter, null, null, null);
 		return params;
 	}
 

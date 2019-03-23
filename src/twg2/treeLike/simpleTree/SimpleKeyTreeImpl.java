@@ -7,8 +7,6 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import lombok.val;
-
 /**
  * @author TeamworkGuy2
  * @since 2015-9-5
@@ -131,7 +129,7 @@ public class SimpleKeyTreeImpl<K, D> implements SimpleKeyTree<K, D> {
 
 
 	private final SimpleKeyTreeImpl<K, D> newChild(K childKey, D childData) {
-		val child = new SimpleKeyTreeImpl<>(this, childKey, childData);
+		var child = new SimpleKeyTreeImpl<K, D>(this, childKey, childData);
 		child.setChildMapConstructor(mapCtor);
 		return child;
 	}
@@ -222,14 +220,14 @@ public class SimpleKeyTreeImpl<K, D> implements SimpleKeyTree<K, D> {
 
 
 	public static final <K, D> SimpleKeyTreeImpl<K, D> newInsertionOrderInst(K key, D data) {
-		val inst = new SimpleKeyTreeImpl<K, D>(key, data);
+		var inst = new SimpleKeyTreeImpl<K, D>(key, data);
 		inst.setChildMapConstructor(LinkedHashMap::new);
 		return inst;
 	}
 
 
 	public static final <K, D> SimpleKeyTreeImpl<K, D> newInsertionOrderInst(SimpleKeyTreeImpl<K, D> parent, K key, D data) {
-		val inst = new SimpleKeyTreeImpl<K, D>(parent, key, data);
+		var inst = new SimpleKeyTreeImpl<K, D>(parent, key, data);
 		inst.setChildMapConstructor(LinkedHashMap::new);
 		return inst;
 	}
@@ -237,21 +235,21 @@ public class SimpleKeyTreeImpl<K, D> implements SimpleKeyTree<K, D> {
 
 	@SafeVarargs
 	public static final <K, D> SimpleKeyTreeImpl<K, D> newInsertionOrderInst(SimpleKeyTreeImpl<K, D> parent, K key, D data, Map.Entry<K, D>... children) {
-		val inst = new SimpleKeyTreeImpl<K, D>(parent, key, data, children);
+		var inst = new SimpleKeyTreeImpl<K, D>(parent, key, data, children);
 		inst.setChildMapConstructor(LinkedHashMap::new);
 		return inst;
 	}
 
 
 	public static final <K, D> SimpleKeyTreeImpl<K, D> newInsertionOrderInst(SimpleKeyTreeImpl<K, D> parent, K key, D data, Map<K, D> children) {
-		val inst = new SimpleKeyTreeImpl<K, D>(parent, key, data, children);
+		var inst = new SimpleKeyTreeImpl<K, D>(parent, key, data, children);
 		inst.setChildMapConstructor(LinkedHashMap::new);
 		return inst;
 	}
 
 
 	public static final <K, D> SimpleKeyTreeImpl<K, D> newInsertionOrderInst(SimpleKeyTreeImpl<K, D> parent, K key, D data, Function<D, K> toKey, Collection<D> children) {
-		val inst = new SimpleKeyTreeImpl<K, D>(parent, key, data, toKey, children);
+		var inst = new SimpleKeyTreeImpl<K, D>(parent, key, data, toKey, children);
 		inst.setChildMapConstructor(LinkedHashMap::new);
 		return inst;
 	}

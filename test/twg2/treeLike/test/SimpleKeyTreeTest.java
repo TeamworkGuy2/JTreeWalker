@@ -7,7 +7,7 @@ import java.util.Map;
 import org.junit.Assert;
 import org.junit.Test;
 
-import twg2.treeLike.KeyTree;
+import twg2.treeLike.KeyTreeLike;
 import twg2.treeLike.TreeFlatten;
 import twg2.treeLike.TreeTraversalOrder;
 import twg2.treeLike.simpleTree.SimpleKeyTreeImpl;
@@ -24,7 +24,7 @@ public class SimpleKeyTreeTest {
 		tree.setChildMapConstructor(() -> new LinkedHashMap<>());
 		TreeData.RandomObjects.addKeyTreeTags(tree);
 
-		Map<String, String> keys = TreeFlatten.toMap((KeyTree<String, String>)tree, true, TreeTraversalOrder.PRE_ORDER,
+		Map<String, String> keys = TreeFlatten.toMap((KeyTreeLike<String, String>)tree, true, TreeTraversalOrder.PRE_ORDER,
 				(t) -> t.hasChildren(),
 				(t) -> t.getChildren().entrySet(),
 				(k) -> {

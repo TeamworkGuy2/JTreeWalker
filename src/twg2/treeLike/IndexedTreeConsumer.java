@@ -6,7 +6,7 @@ package twg2.treeLike;
  * @since 2015-5-27
  */
 @FunctionalInterface
-public interface IndexedSubtreeConsumer<T> {
+public interface IndexedTreeConsumer<T> {
 
 	public void accept(T branch, int index, int size, int depth, T parentBranch);
 

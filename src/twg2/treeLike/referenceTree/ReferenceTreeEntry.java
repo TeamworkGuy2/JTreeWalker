@@ -34,8 +34,7 @@ public class ReferenceTreeEntry<T, R> {
 	 * @param parent
 	 * @param children
 	 */
-	public ReferenceTreeEntry(Reference<T, R> ref, int level,
-			ReferenceTreeEntry<T, R> parent, List<ReferenceTreeEntry<T, R>> children) {
+	public ReferenceTreeEntry(Reference<T, R> ref, int level, ReferenceTreeEntry<T, R> parent, List<ReferenceTreeEntry<T, R>> children) {
 		this.ref = ref;
 		this.level = level;
 		this.parent = parent;
@@ -46,8 +45,7 @@ public class ReferenceTreeEntry<T, R> {
 
 
 	public ReferenceTreeEntry<T, R> copy() {
-		ReferenceTreeEntry<T, R> copy = new ReferenceTreeEntry<>(this.ref, this.level, this.parent, this.children);
-		return copy;
+		return new ReferenceTreeEntry<>(this.ref, this.level, this.parent, this.children);
 	}
 
 
@@ -107,7 +105,7 @@ public class ReferenceTreeEntry<T, R> {
 	}
 
 
-	private void lazyInitChildrenRefs(List<ReferenceTreeEntry<T, R>> children) {
+	private final void lazyInitChildrenRefs(List<ReferenceTreeEntry<T, R>> children) {
 		if(children != null) {
 			this.children = new ArrayList<>(children);
 		}

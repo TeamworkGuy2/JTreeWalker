@@ -15,7 +15,7 @@ public class TreeRemove {
 
 
 	public static <R> void removeAllNodes(int depth, R parent, R tree, Predicate<R> hasChildren, Function<R, ListReadOnly<R>> childrenGetter,
-			SubtreeConsumer<R> consumer, Remover<R, R> remover, boolean consumeOnlyLeafNodes) {
+			TreeConsumer<R> consumer, Remover<R, R> remover, boolean consumeOnlyLeafNodes) {
 		if(!hasChildren.test(tree)) {
 			consumer.accept(tree, depth, parent);
 			if(parent != null) {

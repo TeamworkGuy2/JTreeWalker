@@ -13,7 +13,7 @@ import twg2.collections.interfaces.ListReadOnly;
 public class TreeTraversePostOrder {
 
 	public static <R> void traverseIndexedPostOrder(int index, int size, int depth, R parent, R tree, boolean skipRoot, boolean skipNullRoot, Predicate<R> hasChildren,
-			Function<R, ? extends ListReadOnly<? extends R>> childrenGetter, IndexedSubtreeConsumer<R> consumer, boolean consumeOnlyLeafNodes, IntConsumer startNodeFunc, IntConsumer endNodeFunc) {
+			Function<R, ? extends ListReadOnly<? extends R>> childrenGetter, IndexedTreeConsumer<R> consumer, boolean consumeOnlyLeafNodes, IntConsumer startNodeFunc, IntConsumer endNodeFunc) {
 		if(!hasChildren.test(tree)) {
 			if(!skipRoot && (tree != null || !skipNullRoot)) {
 				consumer.accept(tree, index, size, depth, parent);
@@ -59,7 +59,7 @@ public class TreeTraversePostOrder {
 
 
 	public static <R> void traversePostOrder(int depth, R parent, R tree, boolean skipRoot, boolean skipNullRoot, Predicate<R> hasChildren, Function<R, ? extends Iterable<? extends R>> childrenGetter,
-			SubtreeConsumer<R> consumer, boolean consumeOnlyLeafNodes, IntConsumer startNodeFunc, IntConsumer endNodeFunc) {
+			TreeConsumer<R> consumer, boolean consumeOnlyLeafNodes, IntConsumer startNodeFunc, IntConsumer endNodeFunc) {
 		if(!hasChildren.test(tree)) {
 			if(!skipRoot && (tree != null || !skipNullRoot)) {
 				consumer.accept(tree, depth, parent);

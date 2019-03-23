@@ -17,44 +17,44 @@ public class TreeTransform {
 	private TreeTransform() { throw new AssertionError("cannot instantiate static class TreeTransform"); }
 
 
-	public static <R, S> void traverseTransformTree(R tree, S treeTransformed, SubtreeTransformer<R, S> transformer,
-			Predicate<R> hasChildren, Function<R, ListReadOnly<R>> childrenGetter, SubtreeConsumer<S> transformedConsumer) {
+	public static <R, S> void traverseTransformTree(R tree, S treeTransformed, TreeTransformer<R, S> transformer,
+			Predicate<R> hasChildren, Function<R, ListReadOnly<R>> childrenGetter, TreeConsumer<S> transformedConsumer) {
 		traverseTransformTree(tree, treeTransformed, transformer, hasChildren, childrenGetter, transformedConsumer, null, null);
 	}
 
 
-	public static <R, S> void traverseTransformTree(R tree, S treeTransformed, SubtreeTransformer<R, S> transformer,
-			Predicate<R> hasChildren, Function<R, ListReadOnly<R>> childrenGetter, SubtreeConsumer<S> transformedConsumer, IntConsumer startNodeFunc, IntConsumer endNodeFunc) {
+	public static <R, S> void traverseTransformTree(R tree, S treeTransformed, TreeTransformer<R, S> transformer,
+			Predicate<R> hasChildren, Function<R, ListReadOnly<R>> childrenGetter, TreeConsumer<S> transformedConsumer, IntConsumer startNodeFunc, IntConsumer endNodeFunc) {
 		traverseTransformTree(0, null, tree, null, treeTransformed, transformer, hasChildren, childrenGetter, transformedConsumer, false, startNodeFunc, endNodeFunc);
 	}
 
 
-	public static <R, S> SimpleTree<S> transformSimpleTree(SimpleTree<R> tree, SubtreeTransformer<R, S> transformer,
-			SubtreeConsumer<S> transformedConsumer) {
+	public static <R, S> SimpleTree<S> transformSimpleTree(SimpleTree<R> tree, TreeTransformer<R, S> transformer,
+			TreeConsumer<S> transformedConsumer) {
 		SimpleTreeImpl<S> treeTransformed = new SimpleTreeImpl<>(null);
 		transformSimpleTree0(0, null, tree, null, treeTransformed, transformer, transformedConsumer, false, null, null);
 		return treeTransformed;
 	}
 
 
-	public static <R, S> SimpleTree<S> transformSimpleTree(SimpleTree<R> tree, S rootDataTransformed, SubtreeTransformer<R, S> transformer,
-			SubtreeConsumer<S> transformedConsumer, IntConsumer startNodeFunc, IntConsumer endNodeFunc) {
+	public static <R, S> SimpleTree<S> transformSimpleTree(SimpleTree<R> tree, S rootDataTransformed, TreeTransformer<R, S> transformer,
+			TreeConsumer<S> transformedConsumer, IntConsumer startNodeFunc, IntConsumer endNodeFunc) {
 		SimpleTreeImpl<S> treeTransformed = new SimpleTreeImpl<>(rootDataTransformed);
 		transformSimpleTree0(0, null, tree, null, treeTransformed, transformer, transformedConsumer, false, startNodeFunc, endNodeFunc);
 		return treeTransformed;
 	}
 
 
-	public static <R, S> SimpleTree<S> transformTree(R tree, SubtreeTransformer<R, S> transformer, Predicate<R> hasChildren,
-			Function<R, ListReadOnly<R>> childrenGetter, SubtreeConsumer<S> transformedConsumer, IntConsumer startNodeFunc, IntConsumer endNodeFunc) {
+	public static <R, S> SimpleTree<S> transformTree(R tree, TreeTransformer<R, S> transformer, Predicate<R> hasChildren,
+			Function<R, ListReadOnly<R>> childrenGetter, TreeConsumer<S> transformedConsumer, IntConsumer startNodeFunc, IntConsumer endNodeFunc) {
 		SimpleTreeImpl<S> treeTransformed = new SimpleTreeImpl<>(null); 
 		transformTree0(0, null, tree, null, treeTransformed, transformer, hasChildren, childrenGetter, transformedConsumer, false, startNodeFunc, endNodeFunc);
 		return treeTransformed;
 	}
 
 
-	public static <R, S> void transformTree0(int depth, R parent, R tree, SimpleTree<S> parentTransformed, SimpleTree<S> treeTransformed, SubtreeTransformer<R, S> transformer,
-			Predicate<R> hasChildren, Function<R, ListReadOnly<R>> childrenGetter, SubtreeConsumer<S> consumer, boolean consumeOnlyLeafNodes, IntConsumer startNodeFunc, IntConsumer endNodeFunc) {
+	public static <R, S> void transformTree0(int depth, R parent, R tree, SimpleTree<S> parentTransformed, SimpleTree<S> treeTransformed, TreeTransformer<R, S> transformer,
+			Predicate<R> hasChildren, Function<R, ListReadOnly<R>> childrenGetter, TreeConsumer<S> consumer, boolean consumeOnlyLeafNodes, IntConsumer startNodeFunc, IntConsumer endNodeFunc) {
 		if(!hasChildren.test(tree)) {
 			consumer.accept(treeTransformed.getData(), depth, parentTransformed.getData());
 			// return early because no children
@@ -95,7 +95,7 @@ public class TreeTransform {
 
 
 	public static <R, S> void transformSimpleTree0(int depth, SimpleTree<R> parent, SimpleTree<R> tree, SimpleTree<S> parentTransformed, SimpleTree<S> treeTransformed,
-			SubtreeTransformer<R, S> transformer, SubtreeConsumer<S> consumer, boolean consumeOnlyLeafNodes, IntConsumer startNodeFunc, IntConsumer endNodeFunc) {
+			TreeTransformer<R, S> transformer, TreeConsumer<S> consumer, boolean consumeOnlyLeafNodes, IntConsumer startNodeFunc, IntConsumer endNodeFunc) {
 		if(!tree.hasChildren()) {
 			consumer.accept(treeTransformed.getData(), depth, parentTransformed.getData());
 			// return early because no children
@@ -135,8 +135,8 @@ public class TreeTransform {
 	}
 
 
-	public static <R, S> void traverseTransformTree(int depth, R parent, R tree, S parentTransformed, S treeTransformed, SubtreeTransformer<R, S> transformer,
-			Predicate<R> hasChildren, Function<R, ListReadOnly<R>> childrenGetter, SubtreeConsumer<S> consumer, boolean consumeOnlyLeafNodes, IntConsumer startNodeFunc, IntConsumer endNodeFunc) {
+	public static <R, S> void traverseTransformTree(int depth, R parent, R tree, S parentTransformed, S treeTransformed, TreeTransformer<R, S> transformer,
+			Predicate<R> hasChildren, Function<R, ListReadOnly<R>> childrenGetter, TreeConsumer<S> consumer, boolean consumeOnlyLeafNodes, IntConsumer startNodeFunc, IntConsumer endNodeFunc) {
 		if(!hasChildren.test(tree)) {
 			consumer.accept(treeTransformed, depth, parentTransformed);
 			// return early because no children

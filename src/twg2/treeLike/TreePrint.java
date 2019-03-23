@@ -61,7 +61,7 @@ public class TreePrint {
 			//out.println(indent.toString() + "}");
 		});
 
-		params.setConsumer((SubtreeConsumer<T>)(T branch, int depth, T parentBranch) -> {
+		params.setConsumer((TreeConsumer<T>)(T branch, int depth, T parentBranch) -> {
 			out.println(indent.toString() + (toString != null ? toString.apply(branch) : branch));
 		});
 

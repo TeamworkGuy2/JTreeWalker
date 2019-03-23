@@ -10,7 +10,7 @@ import java.util.function.BiConsumer;
 
 /**
  * @author TeamworkGuy2
- * @since Apr 19, 2015
+ * @since 2015-4-19
  */
 public class ReferenceTree<T, R> {
 	private static final int DEFAULT_LEVEL = 0;
@@ -28,11 +28,12 @@ public class ReferenceTree<T, R> {
 
 
 	public void forEachRef(BiConsumer<T, ReferenceTreeEntry<T, R>> action) {
-		refEntries.forEach((ref, refList) -> {
-			refList.forEach((refEntry) -> {
+		for (Map.Entry<Reference<T, R>, List<ReferenceTreeEntry<T, R>>> refsEntry : refEntries.entrySet()) {
+			Reference<T, R> ref = refsEntry.getKey();
+			for(ReferenceTreeEntry<T, R> refEntry : refsEntry.getValue()) {
 				action.accept(ref.getRef(), refEntry);
-			});
-		});
+			}
+		}
 	}
 
 

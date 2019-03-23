@@ -7,7 +7,7 @@ package twg2.treeLike;
  * @param <R> the resulting tree after transformation
  */
 @FunctionalInterface
-public interface SubtreeTransformer<T, R> {
+public interface TreeTransformer<T, R> {
 
 	/** Transform a tree node, given the node, it's original parent, and it's transformed parent
 	 * @param branch the tree node to transform

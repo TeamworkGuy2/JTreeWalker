@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.IntConsumer;
 
-import twg2.treeLike.IndexedSubtreeConsumer;
-import twg2.treeLike.SubtreeConsumer;
-import twg2.treeLike.SubtreeTransformer;
+import twg2.treeLike.IndexedTreeConsumer;
+import twg2.treeLike.TreeConsumer;
+import twg2.treeLike.TreeTransformer;
 import twg2.treeLike.TreeLike;
 import twg2.treeLike.TreeRemove;
 import twg2.treeLike.TreeTransform;
@@ -21,17 +21,17 @@ import twg2.treeLike.parameters.TreeTraverseParametersImpl;
  * @author TeamworkGuy2
  * @since 2015-7-11
  */
-public class SimpleTreeUtil {
+public final class SimpleTreeUtil {
 
 	private SimpleTreeUtil() { throw new AssertionError("cannot instantiate static class SimpleTreeUtil"); }
 
 
 	// simple indexed tree traversal
-	public static <D> void traverseLeafNodes(SimpleTree<D> tree, TreeTraversalOrder traversalOrder, IndexedSubtreeConsumer<D> consumer) {
+	public static <D> void traverseLeafNodes(SimpleTree<D> tree, TreeTraversalOrder traversalOrder, IndexedTreeConsumer<D> consumer) {
 		traverseLeafNodes(tree, traversalOrder, consumer, null, null);
 	}
 
-	public static <D> void traverseLeafNodes(SimpleTree<D> tree, TreeTraversalOrder traversalOrder, IndexedSubtreeConsumer<D> consumer, IntConsumer startNodeFunc, IntConsumer endNodeFunc) {
+	public static <D> void traverseLeafNodes(SimpleTree<D> tree, TreeTraversalOrder traversalOrder, IndexedTreeConsumer<D> consumer, IntConsumer startNodeFunc, IntConsumer endNodeFunc) {
 		TreeTraverse.Indexed.traverse(SimpleTreeTraverseParameters.leafNodes(tree, traversalOrder)
 				.setConsumerSimpleTree(consumer)
 				.setStartSubtreeFunc(startNodeFunc)
@@ -39,11 +39,11 @@ public class SimpleTreeUtil {
 	}
 
 
-	public static <D> void traverseAllNodes(SimpleTree<D> tree, TreeTraversalOrder traversalOrder, IndexedSubtreeConsumer<D> consumer) {
+	public static <D> void traverseAllNodes(SimpleTree<D> tree, TreeTraversalOrder traversalOrder, IndexedTreeConsumer<D> consumer) {
 		traverseAllNodes(tree, traversalOrder, consumer, null, null);
 	}
 
-	public static <D> void traverseAllNodes(SimpleTree<D> tree, TreeTraversalOrder traversalOrder, IndexedSubtreeConsumer<D> consumer, IntConsumer startNodeFunc, IntConsumer endNodeFunc) {
+	public static <D> void traverseAllNodes(SimpleTree<D> tree, TreeTraversalOrder traversalOrder, IndexedTreeConsumer<D> consumer, IntConsumer startNodeFunc, IntConsumer endNodeFunc) {
 		TreeTraverse.Indexed.traverse(SimpleTreeTraverseParameters.allNodes(tree, traversalOrder)
 				.setConsumerSimpleTree(consumer)
 				.setStartSubtreeFunc(startNodeFunc)
@@ -51,11 +51,11 @@ public class SimpleTreeUtil {
 	}
 
 
-	public static <D> void traverseNodesDepthFirst(SimpleTree<D> tree, TreeTraversalOrder traversalOrder, IndexedSubtreeConsumer<D> consumer) {
+	public static <D> void traverseNodesDepthFirst(SimpleTree<D> tree, TreeTraversalOrder traversalOrder, IndexedTreeConsumer<D> consumer) {
 		traverseNodesDepthFirst(tree, traversalOrder, consumer, null, null);
 	}
 
-	public static <D> void traverseNodesDepthFirst(SimpleTree<D> tree, TreeTraversalOrder traversalOrder, IndexedSubtreeConsumer<D> consumer, IntConsumer startNodeFunc, IntConsumer endNodeFunc) {
+	public static <D> void traverseNodesDepthFirst(SimpleTree<D> tree, TreeTraversalOrder traversalOrder, IndexedTreeConsumer<D> consumer, IntConsumer startNodeFunc, IntConsumer endNodeFunc) {
 		TreeTraverse.Indexed.traverseNodesDepthFirst(IndexedTreeTraverseParameters.allNodes(tree, traversalOrder,
 				(t) -> t.hasChildren(),
 				(t) -> t.getChildren())
@@ -67,11 +67,11 @@ public class SimpleTreeUtil {
 	}
 
 
-	public static <D, S extends TreeLike<D, S>> void traverseLeafNodes(S tree, TreeTraversalOrder traversalOrder, SubtreeConsumer<D> consumer) {
+	public static <D, S extends TreeLike<D, S>> void traverseLeafNodes(S tree, TreeTraversalOrder traversalOrder, TreeConsumer<D> consumer) {
 		traverseLeafNodes(tree, traversalOrder, consumer, null, null);
 	}
 
-	public static <D, S extends TreeLike<D, S>> void traverseLeafNodes(S tree, TreeTraversalOrder traversalOrder, SubtreeConsumer<D> consumer, IntConsumer startNodeFunc, IntConsumer endNodeFunc) {
+	public static <D, S extends TreeLike<D, S>> void traverseLeafNodes(S tree, TreeTraversalOrder traversalOrder, TreeConsumer<D> consumer, IntConsumer startNodeFunc, IntConsumer endNodeFunc) {
 		TreeTraverse.traverse(TreeTraverseParametersImpl.leafNodes(tree, traversalOrder,
 					(t) -> t.hasChildren(),
 					(t) -> t.getChildren())
@@ -81,11 +81,11 @@ public class SimpleTreeUtil {
 	}
 
 
-	public static <D, S extends TreeLike<D, S>> void traverseAllNodes(S tree, TreeTraversalOrder traversalOrder, SubtreeConsumer<D> consumer) {
+	public static <D, S extends TreeLike<D, S>> void traverseAllNodes(S tree, TreeTraversalOrder traversalOrder, TreeConsumer<D> consumer) {
 		traverseAllNodes(tree, traversalOrder, consumer, null, null);
 	}
 
-	public static <D, S extends TreeLike<D, S>> void traverseAllNodes(S tree, TreeTraversalOrder traversalOrder, SubtreeConsumer<D> consumer, IntConsumer startNodeFunc, IntConsumer endNodeFunc) {
+	public static <D, S extends TreeLike<D, S>> void traverseAllNodes(S tree, TreeTraversalOrder traversalOrder, TreeConsumer<D> consumer, IntConsumer startNodeFunc, IntConsumer endNodeFunc) {
 		TreeTraverse.traverse(TreeTraverseParametersImpl.allNodes(tree, traversalOrder,
 					(t) -> t.hasChildren(),
 					(t) -> t.getChildren())
@@ -95,11 +95,11 @@ public class SimpleTreeUtil {
 	}
 
 
-	public static <D, S extends TreeLike<D, S>, R> void transformTree(S tree, R treeTransformed, SubtreeTransformer<S, R> transformer, SubtreeConsumer<R> consumer) {
+	public static <D, S extends TreeLike<D, S>, R> void transformTree(S tree, R treeTransformed, TreeTransformer<S, R> transformer, TreeConsumer<R> consumer) {
 		transformTree(tree, treeTransformed, transformer, consumer, null, null);
 	}
 
-	public static <D, S extends TreeLike<D, S>, R> void transformTree(S tree, R treeTransformed, SubtreeTransformer<S, R> transformer, SubtreeConsumer<R> consumer, IntConsumer startNodeFunc, IntConsumer endNodeFunc) {
+	public static <D, S extends TreeLike<D, S>, R> void transformTree(S tree, R treeTransformed, TreeTransformer<S, R> transformer, TreeConsumer<R> consumer, IntConsumer startNodeFunc, IntConsumer endNodeFunc) {
 		TreeTransform.traverseTransformTree(tree, treeTransformed,
 				transformer,
 				(t) -> t.hasChildren(),
@@ -131,7 +131,7 @@ public class SimpleTreeUtil {
 				(branch, depth, parentBranch) -> { });
 	}
 
-	public static <D> void removeNodesByDepth(SimpleTree<D> tree, boolean consumeOnlyLeafNodes, SubtreeConsumer<SimpleTree<D>> consumer) {
+	public static <D> void removeNodesByDepth(SimpleTree<D> tree, boolean consumeOnlyLeafNodes, TreeConsumer<SimpleTree<D>> consumer) {
 		TreeRemove.removeAllNodes(0, null, tree,
 				(t) -> t.hasChildren(),
 				(t) -> t.getChildren(),
